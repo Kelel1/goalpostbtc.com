@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoalPost BTC — The Bitcoin Milestone Tracker</title>
+  <meta name="description" content="Three years of hand-curated Bitcoin milestone posts from Reddit, documenting the hyperbitcoinization of the world. As BTC price rises, milestone amounts decline.">
+  <meta name="keywords" content="Bitcoin, hyperbitcoinization, Bitcoin milestones, BTC adoption, Bitcoin tracker, satoshis, Bitcoin goals">
+  <meta property="og:title" content="GoalPost BTC — The Bitcoin Milestone Tracker">
+  <meta property="og:description" content="Three years of hand-curated Bitcoin milestone posts documenting hyperbitcoinization in real time.">
+  <meta property="og:url" content="https://goalpostbtc.com">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --btc: #f7931a;
+      --btc-dim: #c97010;
+      --bg: #0f0c08;
+      --bg2: #1a1410;
+      --bg3: #221a12;
+      --text: #e8d5b0;
+      --text-dim: #8a7355;
+      --border: rgba(247,147,26,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* ── TICKER ── */
+    .ticker {
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .ticker-item { display: flex; align-items: center; gap: 0.5rem; }
+    .ticker-label { color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.65rem; }
+    .ticker-value { color: var(--btc); font-weight: 500; }
+    .ticker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--btc); animation: pulse 2s infinite; margin-left: auto; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '₿';
+      position: absolute;
+      right: -5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 40vw;
+      color: rgba(247,147,26,0.03);
+      font-family: 'Playfair Display', serif;
+      pointer-events: none;
+      animation: slowspin 60s linear infinite;
+    }
+
+    @keyframes slowspin {
+      from { transform: translateY(-50%) rotate(0deg); }
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    .hero-left {
+      padding: 6rem 4rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--btc);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadein 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      color: var(--text);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: slideup 0.8s 0.4s forwards;
+    }
+
+    .hero-title span { color: var(--btc); }
+
+    .hero-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text-dim);
+      margin-bottom: 3rem;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeup 0.8s 0.6s forwards;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--btc);
+      color: var(--bg);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      width: fit-content;
+      opacity: 0;
+      animation: fadeup 0.8s 0.8s forwards;
+    }
+
+    .hero-cta:hover {
+      background: var(--text);
+      gap: 1.25rem;
+    }
+
+    .hero-cta-arrow { transition: transform 0.3s; }
+    .hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+
+    .hero-right {
+      padding: 6rem 4rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ── STAT CARDS ── */
+    .stat-card {
+      border-left: 2px solid var(--btc);
+      padding: 1.5rem 2rem;
+      background: var(--bg2);
+      opacity: 0;
+      animation: slideright 0.8s forwards;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.5s; }
+    .stat-card:nth-child(2) { animation-delay: 0.7s; }
+    .stat-card:nth-child(3) { animation-delay: 0.9s; }
+
+    .stat-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--btc);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* ── THESIS SECTION ── */
+    .thesis {
+      padding: 8rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 6rem;
+      align-items: start;
+      border-top: 1px solid var(--border);
+    }
+
+    .thesis-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--btc);
+      position: sticky;
+      top: 5rem;
+    }
+
+    .thesis-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+
+    .thesis-content p {
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+      max-width: 65ch;
+    }
+
+    .thesis-content p strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ── GOALPOSTS MOVING ── */
+    .goalposts {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 4rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .goalposts-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .goalposts-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--btc);
+      margin-bottom: 3rem;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+
+    .timeline-year {
+      background: var(--bg3);
+      padding: 2rem;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .timeline-year:hover { background: #2a1f12; }
+
+    .timeline-year-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+
+    .timeline-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--btc);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .timeline-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: var(--btc);
+      transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* ── METHODOLOGY ── */
+    .methodology {
+      padding: 8rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 6rem;
+      align-items: start;
+      border-top: 1px solid var(--border);
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      margin-top: 3rem;
+    }
+
+    .method-item {
+      background: var(--bg);
+      padding: 2rem;
+    }
+
+    .method-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .method-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--btc);
+      margin-bottom: 0.5rem;
+    }
+
+    .method-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    .methodology-right {
+      position: sticky;
+      top: 5rem;
+    }
+
+    .quote-block {
+      border-left: 2px solid var(--btc);
+      padding: 2rem;
+      background: var(--bg2);
+    }
+
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .quote-attr {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--btc-dim);
+    }
+
+    /* ── FOOTER CTA ── */
+    .footer-cta {
+      background: var(--btc);
+      padding: 6rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-cta::before {
+      content: '₿';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 30vw;
+      color: rgba(0,0,0,0.05);
+      font-family: 'Playfair Display', serif;
+      pointer-events: none;
+    }
+
+    .footer-cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 900;
+      color: var(--bg);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .footer-cta p {
+      font-size: 1.1rem;
+      color: rgba(0,0,0,0.6);
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .footer-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bg);
+      color: var(--btc);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 1.25rem 2.5rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .footer-cta-btn:hover {
+      background: var(--bg2);
+      gap: 1.25rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    footer a {
+      color: var(--btc);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeup {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideup {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideright {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── SCROLLED REVEALS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-item">
+      <span class="ticker-label">BTC</span>
+      <span class="ticker-value" id="btc-price">Loading...</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-label">Block</span>
+      <span class="ticker-value" id="block-height">—</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-label">Posts Tracked</span>
+      <span class="ticker-value">138+</span>
+    </div>
+    <div class="ticker-item">
+      <span class="ticker-label">Since</span>
+      <span class="ticker-value">May 2023</span>
+    </div>
+    <div class="ticker-dot"></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Est. May 2023 · Bitcoin Milestone Archive</div>
+      <h1 class="hero-title">Goal<span>Post</span><br>BTC</h1>
+      <p class="hero-subtitle">The Bitcoin Milestone Tracker — documenting hyperbitcoinization one goalpost at a time.</p>
+      <a href="https://goalpostbtc.streamlit.app" class="hero-cta">
+        Explore the Data <span class="hero-cta-arrow">→</span>
+      </a>
+    </div>
+    <div class="hero-right">
+      <div class="stat-card">
+        <div class="stat-label">Posts Tracked</div>
+        <div class="stat-value">138+</div>
+        <div class="stat-desc">Hand-curated Bitcoin milestone posts from Reddit, each with archival screenshot proof.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Years of Data</div>
+        <div class="stat-value">3</div>
+        <div class="stat-desc">Continuous passive collection since May 2023. No promotion. No bias. Pure organic data.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Median Milestone</div>
+        <div class="stat-value">↓ 99%</div>
+        <div class="stat-desc">From 1.0 BTC in 2023 to fractions today — as price rises, goalposts move down.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THESIS -->
+  <section class="thesis">
+    <div class="thesis-label reveal">The Thesis</div>
+    <div class="thesis-content reveal">
+      <h2>As Bitcoin's price rises,<br>the goalposts keep moving.</h2>
+      <p>
+        In 2023, Reddit's Bitcoin community celebrated reaching <strong>1 BTC</strong> as a meaningful milestone. 
+        By 2025, the celebrations shifted to <strong>0.1 BTC</strong>. Today, people celebrate <strong>0.01 BTC</strong> 
+        and smaller. The price tripled. The milestones shrank.
+      </p>
+      <p>
+        This isn't discouragement — it's <strong>hyperbitcoinization in real time</strong>. More people are 
+        entering the Bitcoin ecosystem at every price level, setting goals appropriate to their means, 
+        and celebrating when they reach them. The goalposts moved. People are still scoring.
+      </p>
+      <p>
+        GoalPost BTC is the only dataset documenting this shift from the ground level — not price charts 
+        or on-chain data, but <strong>human moments</strong>. Real people, real goals, real celebrations.
+      </p>
+    </div>
+  </section>
+
+  <!-- GOALPOSTS MOVING -->
+  <div class="goalposts">
+    <div class="goalposts-inner">
+      <div class="goalposts-label reveal">The Goalpost Movement</div>
+      <div class="timeline reveal">
+        <div class="timeline-year">
+          <div class="timeline-year-label">2023</div>
+          <div class="timeline-amount">1.0 BTC</div>
+          <div class="timeline-desc">The whole bitcoin. The dream milestone. The number everyone aimed for.</div>
+          <div class="timeline-bar" style="width: 100%;"></div>
+        </div>
+        <div class="timeline-year">
+          <div class="timeline-year-label">2024</div>
+          <div class="timeline-amount">0.5 BTC</div>
+          <div class="timeline-desc">Half a bitcoin. Still significant. The community adapts to a new price reality.</div>
+          <div class="timeline-bar" style="width: 50%;"></div>
+        </div>
+        <div class="timeline-year">
+          <div class="timeline-year-label">2025</div>
+          <div class="timeline-amount">0.1 BTC</div>
+          <div class="timeline-desc">Ten million satoshis. The new 1 BTC. Adoption accelerates despite higher prices.</div>
+          <div class="timeline-bar" style="width: 10%;"></div>
+        </div>
+        <div class="timeline-year">
+          <div class="timeline-year-label">2026</div>
+          <div class="timeline-amount">0.01 BTC</div>
+          <div class="timeline-desc">One million satoshis. Smaller goals, more players. The thesis confirmed.</div>
+          <div class="timeline-bar" style="width: 1%;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <section class="methodology">
+    <div class="methodology-left reveal">
+      <div class="thesis-label">The Methodology</div>
+      <div class="method-grid">
+        <div class="method-item">
+          <div class="method-icon">👁</div>
+          <div class="method-title">Passive Collection</div>
+          <div class="method-desc">No promotion. No solicitation. Posts discovered organically through normal Reddit browsing over three years.</div>
+        </div>
+        <div class="method-item">
+          <div class="method-icon">📸</div>
+          <div class="method-title">Screenshot Archive</div>
+          <div class="method-desc">Every post archived with a screenshot. Even deleted posts remain in the dataset permanently.</div>
+        </div>
+        <div class="method-item">
+          <div class="method-icon">🔍</div>
+          <div class="method-title">Human Curation</div>
+          <div class="method-desc">Each entry manually reviewed. Only genuine milestone celebration posts included — no bots, no spam.</div>
+        </div>
+        <div class="method-item">
+          <div class="method-icon">⚠️</div>
+          <div class="method-title">Observer Effect</div>
+          <div class="method-desc">Noted and documented: the site's existence may influence future data. Transparency is part of the record.</div>
+        </div>
+      </div>
+    </div>
+    <div class="methodology-right reveal">
+      <div class="quote-block">
+        <div class="quote-text">"It only takes one pair of eyes to change the scope of the data collected forever."</div>
+        <div class="quote-attr">— GoalPost BTC, Launch Day Musings, Feb 28 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER CTA -->
+  <div class="footer-cta">
+    <h2>See the data.</h2>
+    <p>Charts, milestones, screenshots, and the full dataset — all in one place.</p>
+    <a href="https://goalpostbtc.streamlit.app" class="footer-cta-btn">
+      Open GoalPost BTC →
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>© 2026 GoalPost BTC · <a href="mailto:hello@goalpostbtc.com">hello@goalpostbtc.com</a></div>
+    <div>Built with conviction. Updated continuously. <a href="https://goalpostbtc.streamlit.app">Launch App →</a></div>
+  </footer>
+
+  <script>
+    // ── LIVE BTC PRICE ──
+    async function fetchPrice() {
+      try {
+        const r = await fetch('https://api.kraken.com/0/public/Ticker?pair=XBTUSD');
+        const d = await r.json();
+        const price = parseFloat(d.result.XXBTZUSD.c[0]);
+        document.getElementById('btc-price').textContent = '$' + price.toLocaleString('en-US', {maximumFractionDigits: 0});
+      } catch(e) {
+        document.getElementById('btc-price').textContent = '—';
+      }
+    }
+
+    // ── LIVE BLOCK HEIGHT ──
+    async function fetchBlock() {
+      try {
+        const r = await fetch('https://mempool.space/api/blocks/tip/height');
+        const h = await r.text();
+        document.getElementById('block-height').textContent = parseInt(h).toLocaleString();
+      } catch(e) {
+        document.getElementById('block-height').textContent = '—';
+      }
+    }
+
+    fetchPrice();
+    fetchBlock();
+    setInterval(fetchPrice, 60000);
+    setInterval(fetchBlock, 120000);
+
+    // ── SCROLL REVEALS ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
