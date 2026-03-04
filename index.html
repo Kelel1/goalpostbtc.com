@@ -495,6 +495,22 @@
 
     .daily-cta:hover { gap: 0.75rem; }
 
+    /* Chart of the day */
+    .chart-img {
+      width: 100%;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .chart-caption {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
     /* Musing preview */
     .musing-date {
       font-family: 'IBM Plex Mono', monospace;
@@ -918,6 +934,20 @@
     </div>
   </section>
 
+  <!-- CHART OF THE DAY -->
+  <hr class="daily-divider">
+  <section class="daily-section reveal">
+    <div class="daily-label">📊 Chart of the Day</div>
+    <div id="chart-name" style="font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--text); margin-bottom:1rem;">—</div>
+    <div id="chart-desc" style="font-size:0.9rem; color:var(--text-dim); margin-bottom:1.5rem; line-height:1.7;">—</div>
+    <img id="chart-img" src="" alt="Chart of the Day" class="chart-img" style="display:none;">
+    <div class="chart-caption" id="chart-caption">—</div>
+    <br>
+    <a href="https://goalpostbtc.streamlit.app" class="daily-cta">
+      Explore interactive charts <span>→</span>
+    </a>
+  </section>
+
   <!-- FOOTER CTA -->
   <div class="footer-cta">
     <h2>See the data.</h2>
@@ -982,12 +1012,146 @@
     }
 
     // ── POSTS DATA ──
-    // Format: { date, amount, username, screenshot }
-    // screenshot: path to image file in your GitHub repo screenshots/ folder
-    // Add entries here as dataset grows
     const posts = [
-      { date: "May 2023", amount: "1.0 BTC", username: "u/[first entry]", screenshot: null },
-      // Add more posts here as: { date: "Jan 2024", amount: "0.5 BTC", username: "u/username", screenshot: "screenshots/filename.jpg" }
+      { date: "June 2024", amount: "1 BTC", username: "u/313deezy", screenshot: null },
+      { date: "January 2024", amount: "1 BTC", username: "u/3r5ine", screenshot: null },
+      { date: "August 2024", amount: "1 BTC", username: "u/73kWasTheTop", screenshot: null },
+      { date: "January 2025", amount: "1.5001 BTC", username: "u/Additional_South429", screenshot: null },
+      { date: "April 2024", amount: "0.1000 BTC", username: "u/AdministrationOwn777", screenshot: null },
+      { date: "October 2025", amount: "0.4870 BTC", username: "u/Advanced_Estimate612", screenshot: null },
+      { date: "March 2025", amount: "1.9823 BTC", username: "u/AdviceImpressive219", screenshot: null },
+      { date: "June 2024", amount: "0.1028 BTC", username: "u/airkings2", screenshot: null },
+      { date: "April 2024", amount: "1 BTC", username: "u/anonymousFinPro", screenshot: null },
+      { date: "November 2025", amount: "2 BTC", username: "u/anonymousFinPro", screenshot: null },
+      { date: "February 2025", amount: "0.1000 BTC", username: "u/aroshail", screenshot: null },
+      { date: "March 2025", amount: "0.1000 BTC", username: "u/arsebandit_roberts", screenshot: null },
+      { date: "January 2025", amount: "0.5000 BTC", username: "u/ArtaxNatreyu", screenshot: null },
+      { date: "May 2024", amount: "0.1020 BTC", username: "u/ary_aryy", screenshot: null },
+      { date: "August 2025", amount: "0.1526 BTC", username: "u/attic0218", screenshot: null },
+      { date: "June 2024", amount: "0.2500 BTC", username: "u/Benbon1", screenshot: null },
+      { date: "September 2025", amount: "0.1500 BTC", username: "u/Best_Friendship_6550", screenshot: null },
+      { date: "September 2025", amount: "0.8700 BTC", username: "u/Borig-Might-8058", screenshot: null },
+      { date: "December 2024", amount: "0.2500 BTC", username: "u/Brainstorm-0919", screenshot: null },
+      { date: "October 2025", amount: "1 BTC", username: "u/BTCWholeCoiner", screenshot: null },
+      { date: "February 2025", amount: "0.1029 BTC", username: "u/Buy_Ethereum", screenshot: null },
+      { date: "July 2023", amount: "0.5000 BTC", username: "u/BUYINGBITCOIN30K", screenshot: null },
+      { date: "February 2025", amount: "1 BTC", username: "u/CaterPillar100", screenshot: null },
+      { date: "August 2025", amount: "0.1000 BTC", username: "u/Charandhondaley", screenshot: null },
+      { date: "January 2025", amount: "0.0100 BTC", username: "u/CoolFunnyPersona", screenshot: null },
+      { date: "May 2025", amount: "0.0500 BTC", username: "u/Cultural_Catch_7911", screenshot: null },
+      { date: "September 2025", amount: "1 BTC", username: "u/d13selbaby", screenshot: null },
+      { date: "August 2025", amount: "2 BTC", username: "u/DCVisitor89", screenshot: null },
+      { date: "November 2024", amount: "2.5000 BTC", username: "u/dirodvstw", screenshot: null },
+      { date: "February 2025", amount: "0.2600 BTC", username: "u/Dismal_Distances", screenshot: null },
+      { date: "March 2025", amount: "1 BTC", username: "u/DragonflyWhich931", screenshot: null },
+      { date: "January 2026", amount: "0.4500 BTC", username: "u/Drissek", screenshot: null },
+      { date: "July 2025", amount: "0.7500 BTC", username: "u/EdBread5", screenshot: null },
+      { date: "December 2025", amount: "0.1000 BTC", username: "u/EdVenture42", screenshot: null },
+      { date: "March 2025", amount: "2.0856 BTC", username: "u/Embarrassed_Bee_615", screenshot: null },
+      { date: "January 2025", amount: "0.1000 BTC", username: "u/EmeraldB16", screenshot: null },
+      { date: "November 2025", amount: "0.1000 BTC", username: "u/Emergency-Warthog-56", screenshot: null },
+      { date: "November 2025", amount: "0.2100 BTC", username: "u/febio1", screenshot: null },
+      { date: "August 2025", amount: "1.0014 BTC", username: "u/Far_Significance1669", screenshot: null },
+      { date: "April 2025", amount: "10.6151 BTC", username: "u/Fit_Telephone8220", screenshot: null },
+      { date: "August 2024", amount: "0.0450 BTC", username: "u/fitforbitcoin", screenshot: null },
+      { date: "November 2025", amount: "0.8000 BTC", username: "u/flamet245", screenshot: null },
+      { date: "July 2024", amount: "0.1000 BTC", username: "u/Flimsy-Panda_1400", screenshot: null },
+      { date: "February 2024", amount: "1 BTC", username: "u/Galavanta", screenshot: null },
+      { date: "November 2024", amount: "1 BTC", username: "u/Glum-Dress6056", screenshot: null },
+      { date: "January 2026", amount: "0.0600 BTC", username: "u/Goldgoingup", screenshot: null },
+      { date: "November 2025", amount: "0.1001 BTC", username: "u/GreatComposer85", screenshot: null },
+      { date: "November 2025", amount: "0.1021 BTC", username: "u/Greendizzle2", screenshot: null },
+      { date: "August 2025", amount: "1 BTC", username: "u/hdf_587", screenshot: null },
+      { date: "July 2025", amount: "1.0317 BTC", username: "u/Hot-Alternative6239", screenshot: null },
+      { date: "April 2025", amount: "1 BTC", username: "u/Impossible-Target654", screenshot: null },
+      { date: "June 2024", amount: "0.0208 BTC", username: "u/IndividualSun9724", screenshot: null },
+      { date: "August 2025", amount: "2.0038 BTC", username: "u/Ismelitooopingaa", screenshot: null },
+      { date: "April 2025", amount: "0.1000 BTC", username: "u/j_eduardi7", screenshot: null },
+      { date: "January 2025", amount: "0.0001 BTC", username: "u/Jazzlike-cheek185", screenshot: null },
+      { date: "December 2025", amount: "1.0071 BTC", username: "u/kshah6969", screenshot: null },
+      { date: "August 2025", amount: "0.0501 BTC", username: "u/ksheehan1", screenshot: null },
+      { date: "May 2023", amount: "1.0037 BTC", username: "u/ksleo86", screenshot: null },
+      { date: "September 2025", amount: "0.0100 BTC", username: "u/Like-a-Glove90", screenshot: null },
+      { date: "December 2025", amount: "0.0010 BTC", username: "u/lilpeepisnotalegend", screenshot: null },
+      { date: "January 2025", amount: "0.0010 BTC", username: "u/Live_Wind_5541", screenshot: null },
+      { date: "May 2025", amount: "2.7500 BTC", username: "u/Local_Doubt_4029", screenshot: null },
+      { date: "May 2024", amount: "0.2000 BTC", username: "u/malacosa", screenshot: null },
+      { date: "July 2024", amount: "2.2000 BTC", username: "u/Material_Ad_7277", screenshot: null },
+      { date: "October 2025", amount: "0.4000 BTC", username: "u/MaximumStrike3621", screenshot: null },
+      { date: "November 2025", amount: "0.1001 BTC", username: "u/MoistGameplays", screenshot: null },
+      { date: "January 2024", amount: "1 BTC", username: "u/MuchHold6421", screenshot: null },
+      { date: "December 2025", amount: "0.1025 BTC", username: "u/N_0_1_Z", screenshot: null },
+      { date: "September 2024", amount: "0.4200 BTC", username: "u/namesaretakenwtf", screenshot: null },
+      { date: "June 2023", amount: "0.2000 BTC", username: "u/neda6117", screenshot: null },
+      { date: "November 2025", amount: "0.0100 BTC", username: "u/NiceWorkLad", screenshot: null },
+      { date: "May 2024", amount: "0.5000 BTC", username: "u/No-Neighborhood-3406", screenshot: null },
+      { date: "January 2025", amount: "0.0100 BTC", username: "u/Obvious_Ad_6639", screenshot: null },
+      { date: "November 2024", amount: "1 BTC", username: "u/Odd_Ad_6585", screenshot: null },
+      { date: "February 2024", amount: "1 BTC", username: "u/Ok_Grass_5474", screenshot: null },
+      { date: "January 2025", amount: "0.0010 BTC", username: "u/Ok_Manufacturer_6765", screenshot: null },
+      { date: "May 2025", amount: "0.1000 BTC", username: "u/Ok_Sock_9161", screenshot: null },
+      { date: "February 2025", amount: "0.0100 BTC", username: "u/OkGarlic5913", screenshot: null },
+      { date: "August 2024", amount: "0.0019 BTC", username: "u/PapaDragonHH", screenshot: null },
+      { date: "March 2025", amount: "0.1000 BTC", username: "u/Pettersson007", screenshot: null },
+      { date: "January 2026", amount: "0.0030 BTC", username: "u/pizzeriagio", screenshot: null },
+      { date: "July 2024", amount: "0.5000 BTC", username: "u/PreparationLoud8790", screenshot: null },
+      { date: "February 2025", amount: "1.0159 BTC", username: "u/Prestigious-Soil-876", screenshot: null },
+      { date: "September 2024", amount: "0.2000 BTC", username: "u/RedneckHippy76", screenshot: null },
+      { date: "April 2024", amount: "0.5000 BTC", username: "u/Rocketsloth", screenshot: null },
+      { date: "July 2025", amount: "0.1003 BTC", username: "u/salubrious_", screenshot: null },
+      { date: "December 2025", amount: "0.1094 BTC", username: "u/sekcoin", screenshot: null },
+      { date: "October 2025", amount: "0.1000 BTC", username: "u/Slash_hu", screenshot: null },
+      { date: "December 2024", amount: "0.0876 BTC", username: "u/Spiritwolf7000", screenshot: null },
+      { date: "November 2023", amount: "5.0061 BTC", username: "u/spitefully_empty", screenshot: null },
+      { date: "October 2023", amount: "1.0045 BTC", username: "u/spread_cheeks999", screenshot: null },
+      { date: "August 2024", amount: "0.1000 BTC", username: "u/Standard_Ad8166", screenshot: null },
+      { date: "January 2026", amount: "0.0106 BTC", username: "u/Successful-Site-6434", screenshot: null },
+      { date: "February 2024", amount: "0.5000 BTC", username: "u/than2020", screenshot: null },
+      { date: "March 2025", amount: "0.5000 BTC", username: "u/Tiny-Investigator750", screenshot: null },
+      { date: "October 2025", amount: "0.9600 BTC", username: "u/ToastIsToasted_", screenshot: null },
+      { date: "October 2025", amount: "1 BTC", username: "u/Top_Limit_", screenshot: null },
+      { date: "September 2025", amount: "1 BTC", username: "u/TradingWithTEP", screenshot: null },
+      { date: "February 2025", amount: "0.0010 BTC", username: "u/TrainingAd7626", screenshot: null },
+      { date: "August 2023", amount: "1.0007 BTC", username: "u/tslutty", screenshot: null },
+      { date: "November 2024", amount: "1 BTC", username: "u/Tsriv", screenshot: null },
+      { date: "January 2026", amount: "1.4347 BTC", username: "u/Unable_Illustrator_2", screenshot: null },
+      { date: "August 2025", amount: "0.9500 BTC", username: "u/Upper_Friendship1522", screenshot: null },
+      { date: "February 2024", amount: "1.5000 BTC", username: "u/UpstairsAide3058", screenshot: null },
+      { date: "December 2024", amount: "0.2500 BTC", username: "u/Vagrant8", screenshot: null },
+      { date: "December 2025", amount: "0.1016 BTC", username: "u/Vegetable-Squirrel98", screenshot: null },
+      { date: "November 2023", amount: "1.0700 BTC", username: "u/VividSupermarket1769", screenshot: null },
+      { date: "December 2025", amount: "1 BTC", username: "u/WholeCoiner1", screenshot: null },
+      { date: "February 2025", amount: "0.0044 BTC", username: "u/Winthorpebuys", screenshot: null },
+      { date: "November 2025", amount: "0.1000 BTC", username: "u/zenditt", screenshot: null },
+      { date: "September 2024", amount: "0.0349 BTC", username: "u/Zestyclose-Educator1", screenshot: null },
+      { date: "January 2026", amount: "0.1017 BTC", username: "u/Next-Town1842", screenshot: null },
+      { date: "January 2026", amount: "0.2000 BTC", username: "u/UseIntelligent6283", screenshot: null },
+      { date: "January 2026", amount: "0.1041 BTC", username: "u/nerdpleaser", screenshot: null },
+      { date: "January 2026", amount: "0.7705 BTC", username: "u/Wise-Ostrich9790", screenshot: null },
+      { date: "January 2026", amount: "0.2363 BTC", username: "u/k24brrrrr", screenshot: null },
+      { date: "January 2026", amount: "1.6990 BTC", username: "u/macman713", screenshot: null },
+      { date: "January 2026", amount: "0.6000 BTC", username: "u/ctrl_alt_bye", screenshot: null },
+      { date: "January 2026", amount: "2.1000 BTC", username: "u/WilliamBTCWallace", screenshot: null },
+      { date: "January 2026", amount: "0.5002 BTC", username: "u/lalo_mondragon", screenshot: null },
+      { date: "January 2026", amount: "0.1000 BTC", username: "u/Elektroprodukt", screenshot: null },
+      { date: "January 2026", amount: "0.5009 BTC", username: "u/ImmaLemonYo", screenshot: null },
+      { date: "February 2026", amount: "1.1773 BTC", username: "u/Independent_Bell4977", screenshot: null },
+      { date: "February 2026", amount: "2 BTC", username: "u/gettin", screenshot: null },
+      { date: "July 2025", amount: "10.8473 BTC", username: "u/yebcar", screenshot: null },
+      { date: "February 2026", amount: "0.5000 BTC", username: "u/Jazzlike_Feeling75", screenshot: null },
+      { date: "February 2026", amount: "1.6011 BTC", username: "u/versatile_fx_guy", screenshot: null },
+      { date: "February 2026", amount: "2.1298 BTC", username: "u/AdviceImpressive219", screenshot: null },
+      { date: "February 2026", amount: "1 BTC", username: "u/gedhammond7492", screenshot: null },
+      { date: "February 2026", amount: "0.1000 BTC", username: "u/Spiritual-Will-1586", screenshot: null },
+      { date: "February 2026", amount: "1 BTC", username: "u/scottysworldtv", screenshot: null },
+      { date: "February 2026", amount: "0.1000 BTC", username: "u/Fun-Blackberry-6483", screenshot: null },
+      { date: "February 2026", amount: "1.7022 BTC", username: "u/Odd_Bar9513", screenshot: null },
+      { date: "February 2026", amount: "15 BTC", username: "u/white-body-fluid", screenshot: null },
+      { date: "February 2026", amount: "0.0154 BTC", username: "u/MobApps1", screenshot: null },
+      { date: "February 2026", amount: "0.1331 BTC", username: "u/Commercial_Ad_9864", screenshot: null },
+      { date: "February 2026", amount: "0.1019 BTC", username: "u/icon100i", screenshot: null },
+      { date: "March 2026", amount: "0.7000 BTC", username: "u/Fall-For-October", screenshot: null },
+      { date: "March 2026", amount: "1.0266 BTC", username: "u/Quick_Engine_5795", screenshot: null },
     ];
 
     // ── MUSINGS DATA ──
@@ -1007,6 +1171,34 @@
         date: "March 3, 2026",
         title: "1009 Days",
         preview: "1000 days. 1009 to be exact. Where did the time fly? To be honest I only vaguely remember when I got the idea for this project. Like many people in the Bitcoin space, my initial serious entry started in 2017..."
+      }
+    ];
+
+    // ── CHARTS DATA ──
+    const charts = [
+      {
+        name: "Milestone Clustering",
+        desc: "Bitcoin holders don't celebrate arbitrary amounts — they gravitate toward psychological round numbers. The dominance of 1.0 BTC and 0.1 BTC reveals the gravity points of the community.",
+        src: "assets/heatmap.png",
+        caption: "Top 20 most common milestone amounts by post count"
+      },
+      {
+        name: "Hyperbitcoinization Trend",
+        desc: "As Bitcoin's price rises, the BTC amount celebrated as a milestone declines over time. The downward trendline is the thesis made visible.",
+        src: "assets/scatter.png",
+        caption: "Milestone BTC amounts over time with 30-day rolling median"
+      },
+      {
+        name: "Unique Users Over Time",
+        desc: "Despite rising prices, more people are hitting milestones than ever. The growing unique user count proves adoption is accelerating, not slowing.",
+        src: "assets/unique.png",
+        caption: "Cumulative unique users posting milestones since May 2023"
+      },
+      {
+        name: "Community Heartbeat",
+        desc: "The time between milestone posts reveals the rhythm of Bitcoin adoption. Shortening gaps signal a community that is growing faster than ever.",
+        src: "assets/heartbeat.png",
+        caption: "Days between consecutive milestone posts over time"
       }
     ];
 
@@ -1039,6 +1231,19 @@
         document.getElementById('musing-date').textContent = todayMusing.date;
         document.getElementById('musing-title').textContent = todayMusing.title;
         document.getElementById('musing-preview').textContent = todayMusing.preview;
+      }
+      // Charts rotation
+      if (charts.length > 0) {
+        const chartOrder = shuffleWithSeed(charts, year * 3000);
+        const todayChart = charts[chartOrder[day % charts.length]];
+
+        document.getElementById('chart-name').textContent = todayChart.name;
+        document.getElementById('chart-desc').textContent = todayChart.desc;
+        document.getElementById('chart-caption').textContent = todayChart.caption;
+        const chartImg = document.getElementById('chart-img');
+        chartImg.src = todayChart.src;
+        chartImg.style.display = 'block';
+        chartImg.alt = todayChart.name;
       }
     }
 
