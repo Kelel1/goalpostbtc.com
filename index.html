@@ -409,6 +409,134 @@
       color: var(--btc-dim);
     }
 
+    /* ── DAILY SECTIONS ── */
+    .daily-section {
+      padding: 6rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      border-top: 1px solid var(--border);
+    }
+
+    .daily-section-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .daily-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--btc);
+      margin-bottom: 1.5rem;
+    }
+
+    .daily-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    .daily-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--btc);
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    .daily-username {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .daily-screenshot {
+      width: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      object-position: top;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .daily-screenshot-placeholder {
+      width: 100%;
+      height: 200px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+
+    .daily-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--btc);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: gap 0.3s;
+    }
+
+    .daily-cta:hover { gap: 0.75rem; }
+
+    /* Musing preview */
+    .musing-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .musing-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .musing-preview {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .daily-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .daily-section { padding: 3rem 1.5rem; }
+      .daily-section-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .daily-amount { font-size: 2rem; }
+      .musing-title { font-size: 1.3rem; }
+    }
+
     /* ── FOOTER CTA ── */
     .footer-cta {
       background: var(--btc);
@@ -518,6 +646,92 @@
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* ── MOBILE RESPONSIVE ── */
+    @media (max-width: 768px) {
+
+      /* Ticker — show only BTC price and pulse dot on mobile */
+      .ticker {
+        padding: 0.5rem 1rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .ticker-item:nth-child(3),
+      .ticker-item:nth-child(4) { display: none; }
+
+      /* Hero — stack vertically */
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .hero::after { display: none; }
+      .hero-left {
+        padding: 3rem 1.5rem 2rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .hero-right {
+        padding: 2rem 1.5rem 3rem;
+        gap: 1.5rem;
+      }
+      .hero-eyebrow { margin-bottom: 1rem; }
+      .hero-title { font-size: clamp(3rem, 12vw, 4rem); }
+      .hero-subtitle { font-size: 1rem; margin-bottom: 2rem; }
+      .hero-cta { width: 100%; justify-content: center; }
+
+      /* Stat cards — tighten padding */
+      .stat-card { padding: 1rem 1.25rem; }
+      .stat-value { font-size: 2rem; }
+
+      /* Thesis — single column */
+      .thesis {
+        grid-template-columns: 1fr;
+        padding: 4rem 1.5rem;
+        gap: 2rem;
+      }
+      .thesis-label { position: static; }
+      .thesis-content h2 { font-size: clamp(1.6rem, 6vw, 2.5rem); }
+      .thesis-content p { font-size: 1rem; }
+
+      /* Goalposts timeline — 2x2 grid on mobile */
+      .goalposts { padding: 3rem 1.5rem; }
+      .timeline {
+        grid-template-columns: 1fr 1fr;
+        gap: 2px;
+      }
+      .timeline-year { padding: 1.25rem; }
+      .timeline-amount { font-size: 1.4rem; }
+      .timeline-desc { font-size: 0.75rem; }
+
+      /* Methodology — single column */
+      .methodology {
+        grid-template-columns: 1fr;
+        padding: 4rem 1.5rem;
+        gap: 3rem;
+      }
+      .methodology-right { position: static; }
+      .method-grid { grid-template-columns: 1fr; }
+      .method-item { padding: 1.25rem; }
+
+      /* Footer CTA */
+      .footer-cta { padding: 4rem 1.5rem; }
+      .footer-cta h2 { font-size: clamp(1.8rem, 8vw, 3rem); }
+      .footer-cta-btn { width: 100%; justify-content: center; }
+
+      /* Footer — stack */
+      footer {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 2rem 1.5rem;
+        text-align: center;
+      }
+    }
+
+    /* ── EXTRA SMALL (phones < 400px) ── */
+    @media (max-width: 400px) {
+      .timeline { grid-template-columns: 1fr; }
+      .hero-title { font-size: 2.8rem; }
     }
   </style>
 </head>
@@ -663,6 +877,47 @@
     </div>
   </section>
 
+  <!-- POST OF THE DAY -->
+  <hr class="daily-divider">
+  <section class="daily-section reveal">
+    <div class="daily-label">⚡ Post of the Day</div>
+    <div class="daily-section-inner">
+      <div>
+        <div class="daily-meta" id="post-date">—</div>
+        <div class="daily-amount" id="post-amount">—</div>
+        <div class="daily-username" id="post-username">—</div>
+        <a href="https://goalpostbtc.streamlit.app" class="daily-cta">
+          View in dataset <span>→</span>
+        </a>
+      </div>
+      <div id="post-screenshot-wrap">
+        <div class="daily-screenshot-placeholder">Screenshot loading...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MUSING OF THE DAY -->
+  <hr class="daily-divider">
+  <section class="daily-section reveal">
+    <div class="daily-label">📖 Musing of the Day</div>
+    <div class="daily-section-inner">
+      <div>
+        <div class="musing-date" id="musing-date">—</div>
+        <div class="musing-title" id="musing-title">—</div>
+        <div class="musing-preview" id="musing-preview">—</div>
+        <a href="https://goalpostbtc.streamlit.app" class="daily-cta">
+          Read in full <span>→</span>
+        </a>
+      </div>
+      <div>
+        <div class="quote-block">
+          <div class="quote-text">"It only takes one pair of eyes to change the scope of the data collected forever."</div>
+          <div class="quote-attr">— GoalPost BTC, Launch Day Musings, Feb 28 2026</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER CTA -->
   <div class="footer-cta">
     <h2>See the data.</h2>
@@ -674,11 +929,11 @@
 
   <!-- FOOTER -->
   <footer>
-    <div>© 2026 GoalPost BTC · <a href="mailto:hello@goalpostbtc.com">hello@goalpostbtc.com</a></div>
+    <div>© 2026 GoalPost BTC · <a href="/cdn-cgi/l/email-protection#2048454c4c4f60474f414c504f53544254430e434f4d"><span class="__cf_email__" data-cfemail="7a121f1616153a1d151b160a15090e180e1954191517">[email&#160;protected]</span></a></div>
     <div>Built with conviction. Updated continuously. <a href="https://goalpostbtc.streamlit.app">Launch App →</a></div>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ── LIVE BTC PRICE ──
     async function fetchPrice() {
       try {
@@ -701,6 +956,93 @@
         document.getElementById('block-height').textContent = '—';
       }
     }
+
+    // ── DAILY ROTATION ──
+    // Seeded shuffle — year determines shuffle order, day of year picks entry
+    // Full list exhausted before any repeat within a year
+
+    function seededRandom(seed) {
+      let x = Math.sin(seed + 1) * 10000;
+      return x - Math.floor(x);
+    }
+
+    function shuffleWithSeed(arr, seed) {
+      const a = [...arr.keys()]; // shuffle indices
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(seededRandom(seed + i) * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function getDayOfYear() {
+      const now = new Date();
+      const start = new Date(now.getFullYear(), 0, 0);
+      return Math.floor((now - start) / 86400000);
+    }
+
+    // ── POSTS DATA ──
+    // Format: { date, amount, username, screenshot }
+    // screenshot: path to image file in your GitHub repo screenshots/ folder
+    // Add entries here as dataset grows
+    const posts = [
+      { date: "May 2023", amount: "1.0 BTC", username: "u/[first entry]", screenshot: null },
+      // Add more posts here as: { date: "Jan 2024", amount: "0.5 BTC", username: "u/username", screenshot: "screenshots/filename.jpg" }
+    ];
+
+    // ── MUSINGS DATA ──
+    // preview: first 2-3 sentences only — enough to hook, not enough to satisfy
+    const musings = [
+      {
+        date: "February 28, 2026",
+        title: "Launch Day",
+        preview: "Today, after nearly three years of quietly collecting data, GoalPost BTC goes live. No fanfare, no announcement — just a site that exists now, doing the thing I built it to do."
+      },
+      {
+        date: "March 1, 2026",
+        title: "The First Post-Launch Entry",
+        preview: "It's the first of the month, Sunday March 1st, 2026, and with that first comes another very special first. I have just uploaded the very first new post since this site went live, and the special honor goes to u/Fall-For-October..."
+      },
+      {
+        date: "March 3, 2026",
+        title: "1009 Days",
+        preview: "1000 days. 1009 to be exact. Where did the time fly? To be honest I only vaguely remember when I got the idea for this project. Like many people in the Bitcoin space, my initial serious entry started in 2017..."
+      }
+    ];
+
+    function initDailyRotation() {
+      const year = new Date().getFullYear();
+      const day = getDayOfYear();
+
+      // Posts rotation
+      if (posts.length > 0) {
+        const postOrder = shuffleWithSeed(posts, year * 1000);
+        const todayPost = posts[postOrder[day % posts.length]];
+
+        document.getElementById('post-date').textContent = todayPost.date;
+        document.getElementById('post-amount').textContent = todayPost.amount;
+        document.getElementById('post-username').textContent = todayPost.username;
+
+        const wrap = document.getElementById('post-screenshot-wrap');
+        if (todayPost.screenshot) {
+          wrap.innerHTML = `<img src="${todayPost.screenshot}" alt="Milestone post screenshot" class="daily-screenshot">`;
+        } else {
+          wrap.innerHTML = `<div class="daily-screenshot-placeholder">Screenshot archive — ${posts.length} posts documented</div>`;
+        }
+      }
+
+      // Musings rotation
+      if (musings.length > 0) {
+        const musingOrder = shuffleWithSeed(musings, year * 2000);
+        const todayMusing = musings[musingOrder[day % musings.length]];
+
+        document.getElementById('musing-date').textContent = todayMusing.date;
+        document.getElementById('musing-title').textContent = todayMusing.title;
+        document.getElementById('musing-preview').textContent = todayMusing.preview;
+      }
+    }
+
+    initDailyRotation();
 
     fetchPrice();
     fetchBlock();
