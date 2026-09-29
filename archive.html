@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screenshot Archive — GoalPost BTC</title>
+  <meta name="description" content="Archival screenshots of every Bitcoin milestone post in the GoalPost BTC dataset, preserved as primary sources — many of the originals have since been deleted.">
+  <meta property="og:title" content="Screenshot Archive — GoalPost BTC">
+  <meta property="og:description" content="Every Bitcoin milestone post, preserved.">
+  <meta property="og:url" content="https://goalpostbtc.com/archive.html">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+  <header class="ticker">
+    <a class="ticker-brand" href="./">Goal<span>Post</span> BTC</a>
+    <div class="ticker-item">
+      <span class="ticker-label">BTC</span>
+      <span class="ticker-value" id="btc-price">…</span>
+    </div>
+    <div class="ticker-item ticker-extra">
+      <span class="ticker-label">Block</span>
+      <span class="ticker-value" id="block-height">—</span>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="data.html">Data</a>
+      <a href="archive.html" aria-current="page">Archive</a>
+      <a href="musings.html">Musings</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="ticker-dot"></div>
+  </header>
+
+  <main class="page">
+    <div class="page-eyebrow">Primary Sources</div>
+    <h1 class="page-title">The <span>Archive.</span></h1>
+    <p class="page-lede">Screenshots of the original posts, preserved as primary-source documentation — many users delete their posts over time for privacy or security. Screenshots contain no wallet addresses, and usernames are as publicly posted by the users themselves.</p>
+
+    <form class="filters" onsubmit="return false">
+      <div class="field">
+        <label for="a-search">Search username</label>
+        <input type="search" id="a-search" placeholder="Filter screenshots…" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="a-amount">Milestone</label>
+        <select id="a-amount">
+          <option value="">All amounts</option>
+          <option value="lt0.01">Under 0.01 BTC</option>
+          <option value="0.01-0.1">0.01 – 0.1 BTC</option>
+          <option value="0.1-1">0.1 – 1 BTC</option>
+          <option value="1+">1 BTC and up</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="a-sort">Sort</label>
+        <select id="a-sort">
+          <option value="new">Newest first</option>
+          <option value="old">Oldest first</option>
+          <option value="big">Largest first</option>
+          <option value="small">Smallest first</option>
+        </select>
+      </div>
+      <div class="result-count" id="a-count" aria-live="polite"></div>
+    </form>
+
+    <div class="gallery" id="gallery"></div>
+  </main>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Screenshot viewer">
+    <div class="lightbox-inner">
+      <button type="button" class="nav-btn" data-step="-1" aria-label="Previous screenshot">←</button>
+      <figure>
+        <img alt="">
+        <figcaption></figcaption>
+      </figure>
+      <button type="button" class="nav-btn" data-step="1" aria-label="Next screenshot">→</button>
+    </div>
+    <button type="button" class="close-btn" aria-label="Close">✕</button>
+  </dialog>
+
+  <footer>
+    <div>© 2026 GoalPost BTC · <a href="mailto:hello@goalpostbtc.com">hello@goalpostbtc.com</a></div>
+    <div>Built with conviction. Updated continuously. <a href="data.html">See the data →</a></div>
+  </footer>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/archive-page.js"></script>
+</body>
+</html>

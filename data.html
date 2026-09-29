@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Data — GoalPost BTC</title>
+  <meta name="description" content="Interactive charts and the full dataset of hand-curated Bitcoin milestone posts: milestone clustering, the hyperbitcoinization trend, milestones in dollars, unique users and the community heartbeat.">
+  <meta property="og:title" content="The Data — GoalPost BTC">
+  <meta property="og:description" content="Every Bitcoin milestone post in the GoalPost BTC archive, charted.">
+  <meta property="og:url" content="https://goalpostbtc.com/data.html">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+  <header class="ticker">
+    <a class="ticker-brand" href="./">Goal<span>Post</span> BTC</a>
+    <div class="ticker-item">
+      <span class="ticker-label">BTC</span>
+      <span class="ticker-value" id="btc-price">…</span>
+    </div>
+    <div class="ticker-item ticker-extra">
+      <span class="ticker-label">Block</span>
+      <span class="ticker-value" id="block-height">—</span>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="data.html" aria-current="page">Data</a>
+      <a href="archive.html">Archive</a>
+      <a href="musings.html">Musings</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="ticker-dot"></div>
+  </header>
+
+  <main class="page">
+    <div class="page-eyebrow">The Dataset</div>
+    <h1 class="page-title">See the <span>data.</span></h1>
+    <p class="page-lede">Every milestone post in the archive — <span data-stat="posts">…</span> of them since <span data-stat="sinceLong">…</span> — charted and searchable. Filter below and every chart and the table update together.</p>
+
+    <form class="filters" id="filters" onsubmit="return false">
+      <div class="field">
+        <label for="f-from">From</label>
+        <input type="date" id="f-from">
+      </div>
+      <div class="field">
+        <label for="f-to">To</label>
+        <input type="date" id="f-to">
+      </div>
+      <div class="field">
+        <label for="f-user">Username</label>
+        <input type="search" id="f-user" placeholder="Search…" autocomplete="off">
+      </div>
+      <label class="check"><input type="checkbox" id="f-outliers" checked> Hide 10+ BTC outliers</label>
+      <button type="button" class="btn" id="f-reset">Reset</button>
+      <div class="result-count" id="result-count" aria-live="polite"></div>
+    </form>
+
+    <div class="stat-strip" id="stats">
+      <div class="cell"><div class="stat-label">Posts</div><div class="stat-value" id="s-posts">—</div></div>
+      <div class="cell"><div class="stat-label">Unique users</div><div class="stat-value" id="s-users">—</div></div>
+      <div class="cell"><div class="stat-label">Median milestone</div><div class="stat-value" id="s-median">—</div><div class="stat-desc">BTC</div></div>
+      <div class="cell"><div class="stat-label">Median in USD</div><div class="stat-value" id="s-usd">—</div><div class="stat-desc">on the day posted</div></div>
+      <div class="cell"><div class="stat-label">Most active</div><div class="stat-value" id="s-top" style="font-size:1.05rem;line-height:1.3">—</div><div class="stat-desc" id="s-top-n"></div></div>
+      <div class="cell"><div class="stat-label">Date span</div><div class="stat-value" id="s-span">—</div><div class="stat-desc">days</div></div>
+    </div>
+
+    <div class="chart-grid">
+      <section class="chart-card wide" data-chart="trend"></section>
+      <section class="chart-card" data-chart="clustering"></section>
+      <section class="chart-card" data-chart="race"></section>
+      <section class="chart-card wide" data-chart="dollars"></section>
+      <section class="chart-card" data-chart="users"></section>
+      <section class="chart-card" data-chart="heartbeat"></section>
+    </div>
+
+    <div class="section-label">Reading this data</div>
+    <p class="note">These are the milestone posts that surfaced in one person's Reddit feed, collected by hand since 2023 — <strong>not every milestone ever posted</strong>. Counts reflect what was seen and saved, and quiet stretches can mean fewer posts or simply less scrolling. Treat trends as a ground-level signal, not a census. Prices are daily BTC/USD closes.</p>
+
+    <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
+      <span>All posts</span>
+      <a class="btn" href="data/milestones.csv" download>Download CSV ↓</a>
+    </div>
+    <div class="table-wrap">
+      <table class="data" id="table">
+        <thead>
+          <tr>
+            <th aria-sort="descending" data-key="date"><button type="button">Date</button></th>
+            <th aria-sort="none" data-key="username"><button type="button">User</button></th>
+            <th aria-sort="none" data-key="btc" class="num"><button type="button">BTC</button></th>
+            <th aria-sort="none" data-key="usd" class="num"><button type="button">USD value</button></th>
+            <th aria-sort="none" data-key="price" class="num"><button type="button">BTC price</button></th>
+            <th aria-sort="none" data-key="gap" class="num"><button type="button">Days since prev.</button></th>
+            <th>Screenshot</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer>
+    <div>© 2026 GoalPost BTC · <a href="mailto:hello@goalpostbtc.com">hello@goalpostbtc.com</a></div>
+    <div>Built with conviction. Updated continuously. <a href="about.html">About the project →</a></div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.1.0/plotly-basic.min.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/charts.js"></script>
+  <script src="assets/js/data-page.js"></script>
+</body>
+</html>

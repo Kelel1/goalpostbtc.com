@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musings — GoalPost BTC</title>
+  <meta name="description" content="Thoughts, observations and reflections on Bitcoin and hyperbitcoinization, as seen through the lens of the GoalPost BTC milestone dataset.">
+  <meta property="og:title" content="Musings — GoalPost BTC">
+  <meta property="og:description" content="Reflections on hyperbitcoinization through the lens of real milestone posts.">
+  <meta property="og:url" content="https://goalpostbtc.com/musings.html">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+  <header class="ticker">
+    <a class="ticker-brand" href="./">Goal<span>Post</span> BTC</a>
+    <div class="ticker-item">
+      <span class="ticker-label">BTC</span>
+      <span class="ticker-value" id="btc-price">…</span>
+    </div>
+    <div class="ticker-item ticker-extra">
+      <span class="ticker-label">Block</span>
+      <span class="ticker-value" id="block-height">—</span>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="data.html">Data</a>
+      <a href="archive.html">Archive</a>
+      <a href="musings.html" aria-current="page">Musings</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="ticker-dot"></div>
+  </header>
+
+  <main class="page page-narrow">
+    <div class="page-eyebrow">Bitcoin Musings</div>
+    <h1 class="page-title">Notes from the <span>sidelines.</span></h1>
+    <p class="page-lede">Thoughts, observations and reflections on Bitcoin and hyperbitcoinization — as seen through the lens of this dataset and beyond.</p>
+
+    <ol class="musing-index" id="index"></ol>
+    <div id="musings"></div>
+  </main>
+
+  <footer>
+    <div>© 2026 GoalPost BTC · <a href="mailto:hello@goalpostbtc.com">hello@goalpostbtc.com</a></div>
+    <div>Built with conviction. Updated continuously. <a href="data.html">See the data →</a></div>
+  </footer>
+
+  <script src="assets/js/common.js"></script>
+  <script>
+    (async function () {
+      const musings = await GP.loadMusings();
+      const esc = GP.escapeHTML;
+      document.getElementById('index').innerHTML = musings.map(m =>
+        `<li><a href="#${m.slug}"><span>${esc(m.title)}</span><time datetime="${m.date}">${GP.fmtDate(m.date, true)}</time></a></li>`).join('');
+
+      document.getElementById('musings').innerHTML = musings.map(m => {
+        const images = m.images || [];
+        const body = m.paragraphs.map((p, i) => {
+          const figs = images.filter(img => img.after === i).map(img =>
+            `<figure><img src="${esc(img.src)}" alt="${esc(img.caption)}"><figcaption>${esc(img.caption)}</figcaption></figure>`).join('');
+          return `<p>${esc(p)}</p>${figs}`;
+        }).join('');
+        return `<article class="musing" id="${m.slug}">
+          <div class="meta"><time datetime="${m.date}">${GP.fmtDate(m.date, true)}</time>${m.block_height ? `<span class="block">Block ${m.block_height.toLocaleString('en-US')}</span>` : ''}</div>
+          <h2><a href="#${m.slug}">${esc(m.title)}</a></h2>
+          ${body}
+        </article>`;
+      }).join('');
+
+      // Content is rendered after load, so jump to #slug ourselves (again once images settle).
+      const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (target) {
+        const jump = () => target.scrollIntoView({ behavior: 'instant', block: 'start' });
+        requestAnimationFrame(jump);
+        document.querySelectorAll('article.musing img').forEach(img => img.addEventListener('load', jump, { once: true }));
+      }
+    })().catch(err => {
+      console.error(err);
+      document.getElementById('musings').innerHTML = '<p class="note">Could not load musings. Please refresh.</p>';
+    });
+  </script>
+</body>
+</html>
