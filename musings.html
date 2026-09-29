@@ -62,7 +62,7 @@
         const images = m.images || [];
         const body = m.paragraphs.map((p, i) => {
           const figs = images.filter(img => img.after === i).map(img =>
-            `<figure><img src="${esc(img.src)}" alt="${esc(img.caption)}"><figcaption>${esc(img.caption)}</figcaption></figure>`).join('');
+            `<figure><button type="button" class="fig-btn" aria-label="View full image: ${esc(img.caption)}"><img src="${esc(img.src)}" alt="${esc(img.caption)}"></button><figcaption>${esc(img.caption)}</figcaption></figure>`).join('');
           return `<p>${esc(p)}</p>${figs}`;
         }).join('');
         return `<article class="musing" id="${m.slug}">
@@ -71,6 +71,18 @@
           ${body}
         </article>`;
       }).join('');
+
+      // Tall phone captures get a compact, cropped preview; any image opens full size on click.
+      const markTall = img => img.closest('figure').classList.toggle('tall', img.naturalHeight > img.naturalWidth * 1.3);
+      document.querySelectorAll('article.musing figure img').forEach(img => {
+        if (img.complete && img.naturalWidth) markTall(img); else img.addEventListener('load', () => markTall(img), { once: true });
+      });
+      document.getElementById('musings').addEventListener('click', e => {
+        const btn = e.target.closest('.fig-btn');
+        if (!btn) return;
+        const img = btn.querySelector('img');
+        GP.openImage(img.src, img.alt, esc(img.alt), btn.closest('figure').classList.contains('tall'));
+      });
 
       // Content is rendered after load, so jump to #slug ourselves (again once images settle).
       const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));

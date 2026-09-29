@@ -1354,3 +1354,33 @@ p.chart-note b { color: var(--btc); font-weight: 500; }
   .filters { padding: 0 0 1.25rem; }
   .shot figcaption { padding: 0.6rem 0 0; }
 }
+
+/* ── Musing images: click to view full; tall phone captures get a compact preview ── */
+article.musing .fig-btn { all: unset; display: block; cursor: zoom-in; position: relative; }
+article.musing .fig-btn:focus-visible { outline: 2px solid var(--btc); outline-offset: 3px; }
+article.musing figure.tall .fig-btn {
+  max-width: 400px;
+  max-height: 520px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+article.musing figure.tall img { border: none; border-radius: 0; }
+article.musing figure.tall .fig-btn::after {
+  content: 'View full screenshot';
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 4rem 0 1rem;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--btc);
+  background: linear-gradient(to bottom, rgba(12,12,13,0), var(--bg) 70%);
+}
+article.musing figure.tall .fig-btn:hover::after { text-decoration: underline; }
+
+/* Viewer: tall images scroll at a readable width instead of shrinking to fit */
+.lightbox.tall figure { justify-content: flex-start; overflow-y: auto; }
+.lightbox.tall img { max-height: none; width: min(100%, 560px); }

@@ -198,8 +198,9 @@
     els.forEach(el => observer.observe(el));
   }
 
-  // Lightweight screenshot viewer used by the charts (the archive page has its own).
-  function openShot(file, caption) {
+  // Lightweight image viewer used by the charts and musings (the archive page has its own).
+  // Tall images (long phone captures) open at a readable width and scroll.
+  function openImage(src, alt, captionHTML, tall) {
     let box = document.getElementById('shot-viewer');
     if (!box) {
       document.body.insertAdjacentHTML('beforeend', `
@@ -214,11 +215,17 @@
       box.addEventListener('click', e => { if (e.target === box || e.target.classList.contains('lightbox-inner')) box.close(); });
     }
     const img = box.querySelector('img');
-    img.src = screenshotURL(file);
-    img.alt = 'Screenshot: ' + caption;
-    box.querySelector('figcaption').innerHTML =
-      `${escapeHTML(caption)} · <a href="${archiveURL(file)}">Open in archive →</a>`;
+    img.src = src;
+    img.alt = alt;
+    box.querySelector('figcaption').innerHTML = captionHTML;
+    box.classList.toggle('tall', !!tall);
     if (!box.open) box.showModal();
+    box.querySelector('figure').scrollTop = 0;
+  }
+
+  function openShot(file, caption) {
+    openImage(screenshotURL(file), 'Screenshot: ' + caption,
+      `${escapeHTML(caption)} · <a href="${archiveURL(file)}">Open in archive →</a>`);
   }
 
   function init() {
@@ -233,6 +240,6 @@
   window.GP = {
     loadMilestones, loadMusings, loadPrices,
     fmtBTC, fmtUSD, fmtDate, fmtMonth, median, escapeHTML, displayName,
-    screenshotURL, thumbURL, archiveURL, dayNumber, isoDay, initReveal, openShot,
+    screenshotURL, thumbURL, archiveURL, dayNumber, isoDay, initReveal, openShot, openImage,
   };
 })();
