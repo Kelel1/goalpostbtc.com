@@ -1,5 +1,5 @@
 // Homepage: daily rotation of a post, a musing and a live chart.
-// Seeded shuffle — the year sets the order, the day of year picks the entry,
+// Seeded shuffle: the year sets the order, the day of year picks the entry,
 // so the whole list is shown before anything repeats within a year.
 (function () {
   'use strict';

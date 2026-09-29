@@ -1,4 +1,4 @@
-// GoalPost BTC — shared data loading, formatting and page chrome.
+// GoalPost BTC: shared data loading, formatting and page chrome.
 // Every page includes this first; page scripts use the GP namespace.
 (function () {
   'use strict';
@@ -109,11 +109,11 @@
   function dayNumber(iso) { return Date.parse(iso + 'T00:00:00Z') / DAY_MS; }
 
   function fmtBTC(x) {
-    if (x == null || Number.isNaN(x)) return '—';
+    if (x == null || Number.isNaN(x)) return 'n/a';
     return x.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 8 });
   }
   function fmtUSD(x, compact) {
-    if (x == null || Number.isNaN(x)) return '—';
+    if (x == null || Number.isNaN(x)) return 'n/a';
     if (compact && x >= 1000) {
       return '$' + x.toLocaleString('en-US', { notation: 'compact', maximumFractionDigits: 1 });
     }
@@ -158,13 +158,13 @@
       try {
         const d = await (await fetchOK('https://api.kraken.com/0/public/Ticker?pair=XBTUSD')).json();
         priceEl.textContent = fmtUSD(parseFloat(d.result.XXBTZUSD.c[0]));
-      } catch (e) { priceEl.textContent = '—'; }
+      } catch (e) { priceEl.textContent = 'n/a'; }
     }
     if (blockEl) {
       try {
         const h = await (await fetchOK('https://mempool.space/api/blocks/tip/height')).text();
         blockEl.textContent = parseInt(h, 10).toLocaleString('en-US');
-      } catch (e) { blockEl.textContent = '—'; }
+      } catch (e) { blockEl.textContent = 'n/a'; }
     }
   }
 

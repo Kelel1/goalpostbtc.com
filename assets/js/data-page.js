@@ -46,14 +46,14 @@
     const counts = new Map();
     posts.forEach(p => counts.set(p.username, (counts.get(p.username) || 0) + 1));
     $('s-users').textContent = counts.size.toLocaleString('en-US');
-    $('s-median').textContent = n ? GP.fmtBTC(+GP.median(posts.map(p => p.btc)).toFixed(4)) : '—';
+    $('s-median').textContent = n ? GP.fmtBTC(+GP.median(posts.map(p => p.btc)).toFixed(4)) : 'n/a';
     const usd = posts.map(p => p.usd).filter(v => v != null);
-    $('s-usd').textContent = usd.length ? GP.fmtUSD(GP.median(usd), true) : '—';
+    $('s-usd').textContent = usd.length ? GP.fmtUSD(GP.median(usd), true) : 'n/a';
     const max = Math.max(0, ...counts.values());
     const leaders = [...counts].filter(([, c]) => c === max).map(([u]) => GP.displayName(u));
-    $('s-top').textContent = max > 1 ? (leaders.length > 2 ? `${leaders.length}-way tie` : leaders.join(' & ')) : '—';
+    $('s-top').textContent = max > 1 ? (leaders.length > 2 ? `${leaders.length}-way tie` : leaders.join(' & ')) : 'n/a';
     $('s-top-n').textContent = max > 1 ? `${max} posts${leaders.length > 1 ? ' each' : ''}` : 'no repeat posters';
-    $('s-span').textContent = n ? (GP.dayNumber(posts[n - 1].date) - GP.dayNumber(posts[0].date)).toLocaleString('en-US') : '—';
+    $('s-span').textContent = n ? (GP.dayNumber(posts[n - 1].date) - GP.dayNumber(posts[0].date)).toLocaleString('en-US') : 'n/a';
     $('result-count').textContent = `Showing ${n} of ${all.length} posts`;
   }
 
@@ -76,7 +76,7 @@
       <td class="num btc">${GP.fmtBTC(p.btc)}</td>
       <td class="num">${GP.fmtUSD(p.usd)}</td>
       <td class="num">${GP.fmtUSD(p.price)}</td>
-      <td class="num">${p.gap == null ? '—' : p.gap}</td>
+      <td class="num">${p.gap == null ? 'n/a' : p.gap}</td>
       <td><a href="${GP.archiveURL(p.screenshot)}">View →</a></td>
     </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-dim)">No posts match these filters.</td></tr>';
   }

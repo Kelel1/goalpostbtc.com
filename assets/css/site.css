@@ -1,4 +1,4 @@
-/* GoalPost BTC — shared styles */
+/* GoalPost BTC: shared styles */
 
 :root {
   --btc: #f7931a;
@@ -652,7 +652,7 @@ footer a:hover { text-decoration: underline; }
 /* ── MOBILE RESPONSIVE ── */
 @media (max-width: 768px) {
 
-  /* Ticker — show only BTC price and pulse dot on mobile */
+  /* Ticker: show only BTC price and pulse dot on mobile */
   .ticker {
     padding: 0.5rem 1rem;
     gap: 1rem;
@@ -660,7 +660,7 @@ footer a:hover { text-decoration: underline; }
   }
   .ticker-extra { display: none; }
 
-  /* Hero — stack vertically */
+  /* Hero: stack vertically */
   .hero {
     grid-template-columns: 1fr;
     min-height: auto;
@@ -680,11 +680,11 @@ footer a:hover { text-decoration: underline; }
   .hero-subtitle { font-size: 1rem; margin-bottom: 2rem; }
   .hero-cta { width: 100%; justify-content: center; }
 
-  /* Stat cards — tighten padding */
+  /* Stat cards: tighten padding */
   .stat-card { padding: 1rem 1.25rem; }
   .stat-value { font-size: 2rem; }
 
-  /* Thesis — single column */
+  /* Thesis: single column */
   .thesis {
     grid-template-columns: 1fr;
     padding: 4rem 1.5rem;
@@ -694,7 +694,7 @@ footer a:hover { text-decoration: underline; }
   .thesis-content h2 { font-size: clamp(1.6rem, 6vw, 2.5rem); }
   .thesis-content p { font-size: 1rem; }
 
-  /* Goalposts timeline — 2x2 grid on mobile */
+  /* Goalposts timeline: 2x2 grid on mobile */
   .goalposts { padding: 3rem 1.5rem; }
   .timeline {
     grid-template-columns: 1fr 1fr;
@@ -704,7 +704,7 @@ footer a:hover { text-decoration: underline; }
   .timeline-amount { font-size: 1.4rem; }
   .timeline-desc { font-size: 0.75rem; }
 
-  /* Methodology — single column */
+  /* Methodology: single column */
   .methodology {
     grid-template-columns: 1fr;
     padding: 4rem 1.5rem;
@@ -719,7 +719,7 @@ footer a:hover { text-decoration: underline; }
   .footer-cta h2 { font-size: clamp(1.8rem, 8vw, 3rem); }
   .footer-cta-btn { width: 100%; justify-content: center; }
 
-  /* Footer — stack */
+  /* Footer: stack */
   footer {
     flex-direction: column;
     gap: 0.75rem;
@@ -735,7 +735,7 @@ footer a:hover { text-decoration: underline; }
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   v2 — multi-page site: nav, data explorer, archive, musings, about
+   v2: multi-page site: nav, data explorer, archive, musings, about
    ════════════════════════════════════════════════════════════════════ */
 
 a { color: var(--btc); }

@@ -1,4 +1,4 @@
-# GoalPost BTC — goalpostbtc.com
+# GoalPost BTC: goalpostbtc.com
 
 Documenting hyperbitcoinization one goalpost at a time. A plain static site (no build step) served by GitHub Pages; charts are drawn in the browser from the data files.
 

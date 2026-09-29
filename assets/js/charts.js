@@ -1,4 +1,4 @@
-// GoalPost BTC — Plotly chart builders shared by the data page and the
+// GoalPost BTC: Plotly chart builders shared by the data page and the
 // homepage "Chart of the Day". Each builder takes (el, posts, prices) where
 // posts are sorted oldest → newest and prices comes from GP.loadPrices().
 (function () {
@@ -113,7 +113,7 @@
   const charts = {
     clustering: {
       title: 'Milestone Clustering',
-      desc: "Bitcoin holders don't celebrate arbitrary amounts — they gravitate toward round numbers. These are the most-celebrated milestone amounts (any amount posted more than once). Click a bar to see every screenshot behind it.",
+      desc: "Bitcoin holders don't celebrate arbitrary amounts. They gravitate toward round numbers. These are the most-celebrated milestone amounts (any amount posted more than once). Click a bar to see every screenshot behind it.",
       caption: 'Most common milestone amounts by number of posts',
       render(el, posts) {
         const groups = new Map();
@@ -178,7 +178,7 @@
 
     price: {
       title: 'Goalposts vs. Price',
-      desc: 'Each milestone post placed by the BTC price on the day it was posted (log scale), colored by year. The line is the median milestone in each $10k price band. If the goalposts track the price, the line slopes down to the right — cheaper coins, bigger goals.',
+      desc: 'Each milestone post placed by the BTC price on the day it was posted (log scale), colored by year. The line is the median milestone in each $10k price band. If the goalposts track the price, the line slopes down to the right: cheaper coins, bigger goals.',
       caption: 'Milestone amount vs. BTC price on the post date · median per $10k band',
       render(el, posts, prices) {
         if (!prices || !prices.dates.length) return empty(el, 'BTC price history unavailable.');
@@ -243,7 +243,7 @@
 
     race: {
       title: 'The 1 vs 0.1 Race',
-      desc: 'Running count of posts celebrating exactly 1 BTC versus exactly 0.1 BTC. In the musing “21” the prediction was that 0.1 BTC would overtake 1 BTC by the end of 2026 — this chart keeps score.',
+      desc: 'Running count of posts celebrating exactly 1 BTC versus exactly 0.1 BTC. In the musing “21” the prediction was that 0.1 BTC would overtake 1 BTC by the end of 2026. This chart keeps score.',
       caption: 'Cumulative posts at exactly 1 BTC and exactly 0.1 BTC',
       render(el, posts) {
         const series = (target) => {
@@ -265,7 +265,7 @@
 
     dip: {
       title: 'The Dip Effect',
-      desc: 'Milestone posts per month (bars) against how far BTC traded below its all-time high that month (line — higher means a deeper dip). If dips send people buying, the two should rise together. 2023 sat deep below the 2021 high while this archive was just getting started, and collecting picked up over time — so treat this as a pattern, not proof.',
+      desc: 'Milestone posts per month (bars) against how far BTC traded below its all-time high that month (line; higher means a deeper dip). If dips send people buying, the two should rise together. 2023 sat deep below the 2021 high while this archive was just getting started, and collecting picked up over time, so treat this as a pattern, not proof.',
       caption: 'Posts per month · average % below the running all-time high',
       render(el, posts, prices) {
         if (!prices || !prices.dates.length) return empty(el, 'BTC price history unavailable.');
@@ -285,7 +285,7 @@
         const below = months.map(m => 100 * dd.get(m).sum / dd.get(m).n);
         const x = months.map(m => m + '-15');
         const deep = months.filter((m, i) => below[i] >= 20), rest = months.filter((m, i) => below[i] < 20);
-        const avg = ms => ms.length ? (ms.reduce((a, m) => a + counts.get(m), 0) / ms.length).toFixed(1) : '—';
+        const avg = ms => ms.length ? (ms.reduce((a, m) => a + counts.get(m), 0) / ms.length).toFixed(1) : 'n/a';
         // 2023 was one long post-2021 drawdown while collecting was just starting,
         // so also show the comparison from 2024 on.
         const since = '2024-01', deep24 = deep.filter(m => m >= since), rest24 = rest.filter(m => m >= since);
@@ -305,7 +305,7 @@
           yaxis2: axis({ overlaying: 'y', side: 'right', showgrid: false, rangemode: 'tozero', ticksuffix: '%', title: { text: '' } }),
           bargap: 0.2,
         })).then(() => setNote(el,
-          `Posts per month when BTC was 20%+ below its all-time high, vs. other months — ` +
+          `Posts per month when BTC was 20%+ below its all-time high, vs. other months. ` +
           `all months: <b>${avg(deep)}</b> vs <b>${avg(rest)}</b> (${deep.length} / ${rest.length} months)` +
           (deep24.length && rest24.length && first < since
             ? ` · since 2024: <b>${avg(deep24)}</b> vs <b>${avg(rest24)}</b> (${deep24.length} / ${rest24.length} months)` : '')));
@@ -343,7 +343,7 @@
 
     heartbeat: {
       title: 'Community Heartbeat',
-      desc: `Days between consecutive milestone posts. A low, steady line means a steady stream of milestones; spikes mean silence — nobody hitting milestones, or nobody posting about it. The line is a ${WINDOW_DAYS}-day rolling average. On the data page this chart always covers the full dataset — it isn't affected by the date or username filters.`,
+      desc: `Days between consecutive milestone posts. A low, steady line means a steady stream of milestones; spikes mean silence: nobody hitting milestones, or nobody posting about it. The line is a ${WINDOW_DAYS}-day rolling average. On the data page this chart always covers the full dataset; it isn't affected by the date or username filters.`,
       caption: `Days between posts · ${WINDOW_DAYS}-day rolling average`,
       render(el, posts, prices) {
         const days = [...new Set(posts.map(p => p.date))];

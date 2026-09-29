@@ -78,5 +78,5 @@ for w in warnings:
     print("warning:", w)
 for e in errors:
     print("ERROR:", e)
-print(f"{len(rows)} milestones, {len(musings)} musings — {len(errors)} errors, {len(warnings)} warnings")
+print(f"{len(rows)} milestones, {len(musings)} musings, {len(errors)} errors, {len(warnings)} warnings")
 sys.exit(1 if errors else 0)
