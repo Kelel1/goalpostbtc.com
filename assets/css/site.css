@@ -7,7 +7,7 @@
   --bg2: #1a1410;
   --bg3: #221a12;
   --text: #e8d5b0;
-  --text-dim: #8a7355;
+  --text-dim: #a38a68;  /* ~6:1 on --bg */
   --border: rgba(247,147,26,0.2);
 }
 
@@ -1260,3 +1260,40 @@ p.chart-note {
   margin: 0.75rem 0 0;
 }
 p.chart-note b { color: var(--btc); font-weight: 500; }
+
+/* ── v2.1 cleanup: orange reserved for data and actions ── */
+.hero-eyebrow, .thesis-label, .goalposts-label, .daily-label, .page-eyebrow, .section-label {
+  color: var(--text-dim);
+}
+.hero-eyebrow::before, .thesis-label::before, .goalposts-label::before, .daily-label::before,
+.page-eyebrow::before, .section-label::before {
+  content: '';
+  display: inline-block;
+  width: 1.25rem;
+  height: 1px;
+  background: var(--btc);
+  vertical-align: middle;
+  margin-right: 0.65rem;
+}
+.support-grid .kind { color: var(--text-dim); }
+
+.group-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: var(--text);
+  margin: 4.5rem 0 0.5rem;
+}
+.group-title:first-of-type { margin-top: 3rem; }
+.group-lede {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  max-width: 70ch;
+}
+
+@media (max-width: 768px) {
+  .site-nav { gap: 0.85rem; }
+  .site-nav a { letter-spacing: 0.06em; font-size: 0.64rem; }
+}

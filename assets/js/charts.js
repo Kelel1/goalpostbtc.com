@@ -7,7 +7,7 @@
   const BTC = '#f7931a';
   const BTC_SOFT = 'rgba(247,147,26,0.35)';
   const TEXT = '#e8d5b0';
-  const DIM = '#8a7355';
+  const DIM = '#a38a68';
   const GRID = 'rgba(247,147,26,0.08)';
   const PRICE = '#9a9084';
   const WINDOW_DAYS = 90;
