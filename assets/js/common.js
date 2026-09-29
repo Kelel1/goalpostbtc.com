@@ -182,6 +182,7 @@
       sinceLong: fmtMonth(first),
       latest: fmtDate(last),
       years: Math.floor(years).toString(),
+      subOnePct: Math.round(100 * posts.filter(p => p.btc < 1).length / posts.length) + '%',
     };
     els.forEach(el => { if (values[el.dataset.stat] != null) el.textContent = values[el.dataset.stat]; });
   }

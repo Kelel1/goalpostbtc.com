@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GoalPost BTC — The Bitcoin Milestone Tracker</title>
-  <meta name="description" content="Three years of hand-curated Bitcoin milestone posts from Reddit, documenting the hyperbitcoinization of the world. As BTC price rises, milestone amounts decline.">
+  <meta name="description" content="Three years of hand-curated Bitcoin milestone posts, mostly from Reddit, documenting hyperbitcoinization from the ground up — and tracking whether milestone amounts shrink as the price rises.">
   <meta name="keywords" content="Bitcoin, hyperbitcoinization, Bitcoin milestones, BTC adoption, Bitcoin tracker, satoshis, Bitcoin goals">
   <meta property="og:title" content="GoalPost BTC — The Bitcoin Milestone Tracker">
   <meta property="og:description" content="Three years of hand-curated Bitcoin milestone posts documenting hyperbitcoinization in real time.">
@@ -55,17 +55,17 @@
       <div class="stat-card">
         <div class="stat-label">Posts Tracked</div>
         <div class="stat-value" data-stat="posts">—</div>
-        <div class="stat-desc">Hand-curated Bitcoin milestone posts from Reddit, each with archival screenshot proof.</div>
+        <div class="stat-desc">Hand-curated Bitcoin milestone posts, mostly from Reddit, each with archival screenshot proof.</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Years of Data</div>
         <div class="stat-value" data-stat="years">3</div>
-        <div class="stat-desc">Continuous passive collection since May 2023. No promotion. No bias. Pure organic data.</div>
+        <div class="stat-desc">Continuous passive collection since May 2023. No promotion. No scraping. Spotted and saved by hand.</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Median Milestone</div>
-        <div class="stat-value">↓ 99%</div>
-        <div class="stat-desc">From 1.0 BTC in 2023 to fractions today — as price rises, goalposts move down.</div>
+        <div class="stat-label">Fraction-of-a-Coin Goals</div>
+        <div class="stat-value" data-stat="subOnePct">—</div>
+        <div class="stat-desc">Share of milestone posts celebrating less than 1 BTC — most goalposts are now set in fractions of a coin.</div>
       </div>
     </div>
   </section>
@@ -76,9 +76,10 @@
     <div class="thesis-content reveal">
       <h2>As Bitcoin's price rises,<br>the goalposts keep moving.</h2>
       <p>
-        In 2023, Reddit's Bitcoin community celebrated reaching <strong>1 BTC</strong> as a meaningful milestone. 
-        By 2025, the celebrations shifted to <strong>0.1 BTC</strong>. Today, people celebrate <strong>0.01 BTC</strong> 
-        and smaller. The price tripled. The milestones shrank.
+        When this archive began in 2023, most of the milestone posts were about reaching <strong>1 BTC</strong>.
+        Since then, <strong>0.1 BTC</strong> has become the second most-celebrated goal in the dataset and is
+        closing in on the whole coin, and <strong>0.01 BTC</strong> posts have started to appear. As the price
+        climbs, more people set their goals in fractions of a coin.
       </p>
       <p>
         This isn't discouragement — it's <strong>hyperbitcoinization in real time</strong>. More people are 
@@ -86,8 +87,13 @@
         and celebrating when they reach them. The goalposts moved. People are still scoring.
       </p>
       <p>
-        GoalPost BTC is the only dataset documenting this shift from the ground level — not price charts 
-        or on-chain data, but <strong>human moments</strong>. Real people, real goals, real celebrations.
+        It isn't a straight line. Big whole-coin posts keep arriving alongside the small ones, and the
+        typical milestone rises and falls from year to year — the numbers below come straight from the data,
+        noise and all. Whether the long-run trend bends down is exactly what this project is watching.
+      </p>
+      <p>
+        GoalPost BTC documents this from the ground level — not price charts or on-chain data, but
+        <strong>human moments</strong>. Real people, real goals, real celebrations.
       </p>
     </div>
   </section>
@@ -95,32 +101,9 @@
   <!-- GOALPOSTS MOVING -->
   <div class="goalposts">
     <div class="goalposts-inner">
-      <div class="goalposts-label reveal">The Goalpost Movement</div>
-      <div class="timeline reveal">
-        <div class="timeline-year">
-          <div class="timeline-year-label">2023</div>
-          <div class="timeline-amount">1.0 BTC</div>
-          <div class="timeline-desc">The whole bitcoin. The dream milestone. The number everyone aimed for.</div>
-          <div class="timeline-bar" style="width: 100%;"></div>
-        </div>
-        <div class="timeline-year">
-          <div class="timeline-year-label">2024</div>
-          <div class="timeline-amount">0.5 BTC</div>
-          <div class="timeline-desc">Half a bitcoin. Still significant. The community adapts to a new price reality.</div>
-          <div class="timeline-bar" style="width: 50%;"></div>
-        </div>
-        <div class="timeline-year">
-          <div class="timeline-year-label">2025</div>
-          <div class="timeline-amount">0.1 BTC</div>
-          <div class="timeline-desc">Ten million satoshis. The new 1 BTC. Adoption accelerates despite higher prices.</div>
-          <div class="timeline-bar" style="width: 10%;"></div>
-        </div>
-        <div class="timeline-year">
-          <div class="timeline-year-label">2026</div>
-          <div class="timeline-amount">0.01 BTC</div>
-          <div class="timeline-desc">One million satoshis. Smaller goals, more players. The thesis confirmed.</div>
-          <div class="timeline-bar" style="width: 1%;"></div>
-        </div>
+      <div class="goalposts-label reveal">The Goalpost Movement · Median milestone by year</div>
+      <div class="timeline reveal" id="timeline" aria-live="polite">
+        <div class="timeline-year"><div class="timeline-year-label">Loading…</div></div>
       </div>
     </div>
   </div>

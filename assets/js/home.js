@@ -57,6 +57,27 @@
     $('musing-link').href = 'musings.html#' + m.slug;
   });
 
+  // The Goalpost Movement: median milestone per calendar year, straight from the data.
+  GP.loadMilestones().then(posts => {
+    const years = new Map();
+    posts.forEach(p => { const y = p.date.slice(0, 4); (years.get(y) || years.set(y, []).get(y)).push(p.btc); });
+    const rows = [...years].map(([year, amounts]) => {
+      const counts = new Map();
+      amounts.forEach(a => counts.set(a, (counts.get(a) || 0) + 1));
+      const [top, topN] = [...counts].sort((a, b) => b[1] - a[1] || b[0] - a[0])[0];
+      return { year, n: amounts.length, median: GP.median(amounts), top, topN, subOne: amounts.filter(a => a < 1).length };
+    });
+    const max = Math.max(...rows.map(r => r.median));
+    const current = String(new Date().getFullYear());
+    $('timeline').innerHTML = rows.map(r => `
+      <div class="timeline-year">
+        <div class="timeline-year-label">${r.year}${r.year === current ? ' · so far' : ''}</div>
+        <div class="timeline-amount">${GP.fmtBTC(+r.median.toFixed(2))} BTC</div>
+        <div class="timeline-desc">${r.n} posts · ${Math.round(100 * r.subOne / r.n)}% under 1 BTC${r.topN > 1 ? ` · most common: ${GP.fmtBTC(r.top)} BTC (${r.topN})` : ''}</div>
+        <div class="timeline-bar" style="width: ${Math.max(2, 100 * r.median / max)}%;"></div>
+      </div>`).join('');
+  });
+
   const keys = Object.keys(GP.charts);
   const chart = GP.charts[pick(keys, 3000)];
   $('chart-name').textContent = chart.title;
