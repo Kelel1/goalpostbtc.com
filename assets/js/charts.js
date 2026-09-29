@@ -143,6 +143,43 @@
       },
     },
 
+    price: {
+      title: 'Goalposts vs. Price',
+      desc: 'Each milestone post placed by the BTC price on the day it was posted (log scale), colored by year. The line is the median milestone in each $10k price band. If the goalposts track the price, the line slopes down to the right — cheaper coins, bigger goals.',
+      caption: 'Milestone amount vs. BTC price on the post date · median per $10k band',
+      render(el, posts, prices) {
+        if (!prices || !prices.dates.length) return empty(el, 'BTC price history unavailable.');
+        const pts = posts.map(p => ({ ...p, price: prices.on(p.date) })).filter(p => p.price);
+        if (pts.length < 5) return empty(el);
+        const years = [...new Set(pts.map(p => p.date.slice(0, 4)))].sort();
+        // Warm ramp from muted (oldest) to bright (latest) so adjacent years stay distinguishable.
+        const ramp = ['#6e6255', '#a67c3d', '#f7931a', '#ffd08a'];
+        const shade = i => ramp[Math.max(0, ramp.length - years.length + i)] || BTC;
+        const traces = years.map((y, i) => {
+          const ys = pts.filter(p => p.date.startsWith(y));
+          return {
+            x: ys.map(p => p.price), y: ys.map(p => p.btc), type: 'scatter', mode: 'markers', name: y,
+            marker: { color: shade(i), size: 7, line: { width: 0 } },
+            customdata: ys.map(p => [GP.displayName(p.username), GP.fmtBTC(p.btc), GP.fmtDate(p.date)]),
+            hovertemplate: '<b>%{customdata[0]}</b><br>%{customdata[1]} BTC<br>%{customdata[2]} · BTC at $%{x:,.0f}<extra></extra>',
+          };
+        });
+        const bands = new Map();
+        pts.forEach(p => { const b = Math.floor(p.price / 10000); (bands.get(b) || bands.set(b, []).get(b)).push(p.btc); });
+        const line = [...bands].filter(([, v]) => v.length >= 5).sort((a, b) => a[0] - b[0]);
+        traces.push({
+          x: line.map(([b]) => b * 10000 + 5000), y: line.map(([, v]) => GP.median(v)), type: 'scatter', mode: 'lines+markers',
+          name: 'Median per $10k band', line: { color: '#ffffff', width: 2.5, dash: 'dot' }, marker: { color: '#ffffff', size: 7, symbol: 'diamond' },
+          customdata: line.map(([b, v]) => [`$${b * 10}k–$${b * 10 + 10}k`, v.length]),
+          hovertemplate: '%{customdata[0]}: median %{y:.2f} BTC (%{customdata[1]} posts)<extra></extra>',
+        });
+        return draw(el, traces, layout({
+          xaxis: axis({ title: { text: 'BTC price on post date' }, tickprefix: '$', tickformat: '~s' }),
+          yaxis: axis(Object.assign({ type: 'log', title: { text: 'BTC celebrated' } }, logTicks)),
+        }));
+      },
+    },
+
     dollars: {
       title: 'Milestones in Dollars',
       desc: "The same posts valued in USD on the day they were made. If the goalposts move down in BTC while holding steady in dollars, people are chasing a dollar figure rather than a number of coins.",
