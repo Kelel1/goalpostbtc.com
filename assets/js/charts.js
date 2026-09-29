@@ -5,11 +5,11 @@
   'use strict';
 
   const BTC = '#f7931a';
-  const BTC_SOFT = 'rgba(247,147,26,0.35)';
-  const TEXT = '#e8d5b0';
-  const DIM = '#a38a68';
-  const GRID = 'rgba(247,147,26,0.08)';
-  const PRICE = '#9a9084';
+  const BTC_SOFT = 'rgba(255,255,255,0.16)';  // secondary bars, neutral so orange lines lead
+  const TEXT = '#ecebe8';
+  const DIM = '#9b9ba0';
+  const GRID = 'rgba(255,255,255,0.06)';
+  const PRICE = '#8e8e93';
   const WINDOW_DAYS = 90;
   const SHOT = 3;  // customdata index holding a post's screenshot file
   const CLICK_HINT = '<br><i>Click to view screenshot</i><extra></extra>';
@@ -20,7 +20,7 @@
     return Object.assign({
       color: DIM,
       gridcolor: GRID,
-      linecolor: 'rgba(247,147,26,0.2)',
+      linecolor: 'rgba(255,255,255,0.12)',
       zeroline: false,
       tickfont: { family: 'IBM Plex Mono, monospace', size: 11, color: DIM },
       title: { font: { family: 'IBM Plex Mono, monospace', size: 11, color: DIM } },
@@ -34,7 +34,7 @@
       font: { family: 'IBM Plex Sans, sans-serif', color: TEXT, size: 12 },
       margin: { l: 64, r: 24, t: 12, b: 48 },
       hovermode: 'closest',
-      hoverlabel: { bgcolor: '#221a12', bordercolor: BTC, font: { family: 'IBM Plex Mono, monospace', color: TEXT, size: 12 } },
+      hoverlabel: { bgcolor: '#1c1c1e', bordercolor: BTC, font: { family: 'IBM Plex Mono, monospace', color: TEXT, size: 12 } },
       legend: { orientation: 'h', x: 0, y: 1.02, yanchor: 'bottom', font: { size: 11, color: DIM }, bgcolor: 'rgba(0,0,0,0)' },
       xaxis: axis({ type: 'date' }),
       yaxis: axis(),
@@ -133,7 +133,7 @@
           type: 'bar', orientation: 'h',
           x: top.map(g => g.count),
           y: top.map(g => GP.fmtBTC(g.btc) + ' BTC'),
-          marker: { color: top.map(g => `rgba(247,147,26,${0.3 + 0.7 * g.count / max})`) },
+          marker: { color: BTC },
           meta: 'amount',
           customdata: top.map(g => [GP.fmtDate(g.first), GP.fmtDate(g.last), g.btc]),
           hovertemplate: '<b>%{y}</b><br>%{x} posts<br>%{customdata[0]} – %{customdata[1]}<br><i>Click to see every screenshot</i><extra></extra>',
@@ -185,8 +185,8 @@
         const pts = posts.map(p => ({ ...p, price: prices.on(p.date) })).filter(p => p.price);
         if (pts.length < 5) return empty(el);
         const years = [...new Set(pts.map(p => p.date.slice(0, 4)))].sort();
-        // Warm ramp from muted (oldest) to bright (latest) so adjacent years stay distinguishable.
-        const ramp = ['#6e6255', '#a67c3d', '#f7931a', '#ffd08a'];
+        // Ramp from gray (oldest) to bright orange (latest) so adjacent years stay distinguishable.
+        const ramp = ['#5f5f64', '#a1a1a6', '#f7931a', '#ffd08a'];
         const shade = i => ramp[Math.max(0, ramp.length - years.length + i)] || BTC;
         const traces = years.map((y, i) => {
           const ys = pts.filter(p => p.date.startsWith(y));
@@ -292,7 +292,7 @@
         return draw(el, [
           {
             x, y: months.map(m => counts.get(m)), type: 'bar', name: 'Posts / month',
-            marker: { color: 'rgba(247,147,26,0.55)' }, hovertemplate: '%{x|%b %Y}: %{y} posts<extra></extra>',
+            marker: { color: 'rgba(247,147,26,0.85)' }, hovertemplate: '%{x|%b %Y}: %{y} posts<extra></extra>',
           },
           {
             x, y: below, yaxis: 'y2', type: 'scatter', mode: 'lines', name: '% below all-time high',
@@ -352,7 +352,7 @@
         if (gaps.length < 2) return empty(el);
         const avg = rolling(gaps, mean, 2);
         const traces = [
-          { x: gaps.map(g => g.date), y: gaps.map(g => g.value), type: 'bar', name: 'Days since previous post', width: 3 * 86400000, marker: { color: 'rgba(247,147,26,0.55)' }, hovertemplate: '%{x|%b %d, %Y}: %{y} days since previous<extra></extra>' },
+          { x: gaps.map(g => g.date), y: gaps.map(g => g.value), type: 'bar', name: 'Days since previous post', width: 3 * 86400000, marker: { color: BTC_SOFT }, hovertemplate: '%{x|%b %d, %Y}: %{y} days since previous<extra></extra>' },
           { x: avg.x, y: avg.y, type: 'scatter', mode: 'lines', name: `${WINDOW_DAYS}-day average gap`, line: { color: BTC, width: 3, shape: 'spline', smoothing: 0.6 }, hovertemplate: 'Avg gap: %{y:.1f} days<extra></extra>' },
         ];
         if (prices && prices.dates.length) traces.push(priceTrace(prices, days[0], days[days.length - 1]));
