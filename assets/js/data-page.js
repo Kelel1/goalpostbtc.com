@@ -96,7 +96,12 @@
   function update() {
     const posts = filtered();
     renderStats(posts);
-    cards.forEach(card => GP.charts[card.dataset.chart].render(card.querySelector('.chart'), posts, prices));
+    // The heartbeat is the global posting pulse, so it ignores the date/user filters.
+    const pulse = all.filter(p => !inputs.outliers.checked || p.btc < 10);
+    cards.forEach(card => {
+      const key = card.dataset.chart;
+      GP.charts[key].render(card.querySelector('.chart'), key === 'heartbeat' ? pulse : posts, prices);
+    });
     renderTable(posts);
   }
 

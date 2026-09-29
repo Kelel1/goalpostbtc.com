@@ -224,7 +224,7 @@
 
     heartbeat: {
       title: 'Community Heartbeat',
-      desc: `Days between consecutive milestone posts. A low, steady line means a steady stream of milestones; spikes mean silence — nobody hitting milestones, or nobody posting about it. The line is a ${WINDOW_DAYS}-day rolling average.`,
+      desc: `Days between consecutive milestone posts. A low, steady line means a steady stream of milestones; spikes mean silence — nobody hitting milestones, or nobody posting about it. The line is a ${WINDOW_DAYS}-day rolling average. On the data page this chart always covers the full dataset — it isn't affected by the date or username filters.`,
       caption: `Days between posts · ${WINDOW_DAYS}-day rolling average`,
       render(el, posts, prices) {
         const days = [...new Set(posts.map(p => p.date))];
