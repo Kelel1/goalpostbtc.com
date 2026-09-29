@@ -1297,3 +1297,60 @@ p.chart-note b { color: var(--btc); font-weight: 500; }
   .site-nav { gap: 0.85rem; }
   .site-nav a { letter-spacing: 0.06em; font-size: 0.64rem; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   v2.2: fewer boxes. Space and type do the grouping; frames stay only
+   where an edge means something (screenshots, controls, the table).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Hero stats: the number is the design */
+.stat-card { border-left: none; background: none; padding: 0; }
+.hero-right { gap: 2.75rem; }
+
+/* Goalpost timeline: columns of text over the orange bar, no tiles */
+.goalposts { background: none; border-bottom: none; }
+.timeline { gap: 2.5rem; }
+.timeline-year { background: none; padding: 0 0 1.25rem; }
+.timeline-year:hover { background: none; }
+.timeline-bar { height: 2px; }
+
+/* Pull quotes and notes keep their rule, lose the panel */
+.quote-block, .note { background: none; }
+
+/* Data page: stats, filters and charts sit on the page */
+.stat-strip { background: none; border: none; gap: 2rem 2.5rem; margin: 1rem 0 1.5rem; }
+.stat-strip .cell { background: none; padding: 0; }
+.filters { background: none; border: none; border-bottom: 1px solid var(--border); padding: 0 0 1.5rem; }
+.chart-grid { background: none; border: none; gap: 3.5rem 4rem; }
+.chart-card { background: none; padding: 0; }
+.group-title { border-top: 1px solid var(--border); padding-top: 3rem; margin-top: 4.5rem; }
+
+/* Archive: the screenshot keeps a thin edge, the card around it goes */
+.shot { background: none; border: none; }
+.shot:hover { transform: none; border: none; }
+.shot button { border: 1px solid var(--border); border-radius: 3px; transition: border-color 0.2s, transform 0.2s; }
+.shot:hover button { border-color: var(--btc); transform: translateY(-2px); }
+.shot.highlight { box-shadow: none; border: none; }
+.shot.highlight button { border-color: var(--btc); box-shadow: 0 0 0 3px rgba(247,147,26,0.3); }
+.shot figcaption { padding: 0.75rem 0 0; }
+
+/* About: plain lists and two open columns */
+.resource-list { background: none; border: none; border-top: 1px solid var(--border); gap: 0; }
+.resource-list a { background: none; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+.resource-list a:hover { background: none; }
+.resource-list a:hover .name { text-decoration: underline; }
+.support-grid { background: none; border: none; gap: 2rem; }
+.support-grid > div { background: none; padding: 0; }
+
+/* Small radius on screenshots and controls only */
+.daily-screenshot, article.musing figure img, .lightbox img { border-radius: 3px; }
+.btn, .hero-cta, .footer-cta-btn, .field input, .field select, .lightbox .nav-btn, .lightbox .close-btn { border-radius: 3px; }
+
+@media (max-width: 768px) {
+  .timeline { gap: 1.75rem 1.25rem; }
+  .stat-strip { gap: 1.5rem 1.25rem; }
+  .chart-grid { gap: 3rem; }
+  .group-title { padding-top: 2.25rem; margin-top: 3rem; }
+  .filters { padding: 0 0 1.25rem; }
+  .shot figcaption { padding: 0.6rem 0 0; }
+}
