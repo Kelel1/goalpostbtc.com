@@ -41,22 +41,38 @@
     }, extra || {});
   }
 
+  // A line of live stats under a chart (kept in sync with filters).
+  function setNote(el, html) {
+    let note = el.nextElementSibling;
+    if (!(note && note.classList.contains('chart-note'))) {
+      if (!html) return;
+      note = document.createElement('p');
+      note.className = 'chart-note';
+      el.after(note);
+    }
+    if (html) note.innerHTML = html; else note.remove();
+  }
+
   function empty(el, msg) {
+    setNote(el, '');
     Plotly.purge(el);
     el.innerHTML = `<div class="chart-empty">${msg || 'Not enough data for this view.'}</div>`;
   }
 
-  // Points whose customdata carries a screenshot open it in the viewer when clicked.
+  // Points whose customdata carries a screenshot open it in the viewer when clicked;
+  // bars on traces marked meta: 'amount' open the archive filtered to that amount.
   const shotOf = pt => pt && Array.isArray(pt.customdata) && pt.customdata[SHOT];
+  const amountOf = pt => pt && pt.data.meta === 'amount' && pt.customdata[2];
   function wireClicks(el) {
     if (el._gpClicks) return;
     el._gpClicks = true;
     const drag = () => el.querySelector('.nsewdrag');
     el.on('plotly_click', e => {
-      const pt = e.points[0], file = shotOf(pt);
+      const pt = e.points[0], file = shotOf(pt), btc = amountOf(pt);
       if (file) GP.openShot(file, `${pt.customdata[0]} · ${pt.customdata[1]} BTC`);
+      else if (btc) location.href = 'archive.html?btc=' + encodeURIComponent(btc);
     });
-    el.on('plotly_hover', e => { const d = drag(); if (d && shotOf(e.points[0])) d.style.cursor = 'pointer'; });
+    el.on('plotly_hover', e => { const d = drag(); if (d && (shotOf(e.points[0]) || amountOf(e.points[0]))) d.style.cursor = 'pointer'; });
     el.on('plotly_unhover', () => { const d = drag(); if (d) d.style.cursor = ''; });
   }
 
@@ -97,7 +113,7 @@
   const charts = {
     clustering: {
       title: 'Milestone Clustering',
-      desc: "Bitcoin holders don't celebrate arbitrary amounts — they gravitate toward round numbers. These are the most-celebrated milestone amounts (any amount posted more than once).",
+      desc: "Bitcoin holders don't celebrate arbitrary amounts — they gravitate toward round numbers. These are the most-celebrated milestone amounts (any amount posted more than once). Click a bar to see every screenshot behind it.",
       caption: 'Most common milestone amounts by number of posts',
       render(el, posts) {
         const groups = new Map();
@@ -118,8 +134,9 @@
           x: top.map(g => g.count),
           y: top.map(g => GP.fmtBTC(g.btc) + ' BTC'),
           marker: { color: top.map(g => `rgba(247,147,26,${0.3 + 0.7 * g.count / max})`) },
-          customdata: top.map(g => [GP.fmtDate(g.first), GP.fmtDate(g.last)]),
-          hovertemplate: '<b>%{y}</b><br>%{x} posts<br>%{customdata[0]} – %{customdata[1]}<extra></extra>',
+          meta: 'amount',
+          customdata: top.map(g => [GP.fmtDate(g.first), GP.fmtDate(g.last), g.btc]),
+          hovertemplate: '<b>%{y}</b><br>%{x} posts<br>%{customdata[0]} – %{customdata[1]}<br><i>Click to see every screenshot</i><extra></extra>',
         }], layout({
           margin: { l: 118, r: 24, t: 8, b: 44 },
           xaxis: axis({ title: { text: 'Posts' }, dtick: max > 12 ? 5 : 1 }),
@@ -243,6 +260,55 @@
           { ...a, type: 'scatter', mode: 'lines', name: `1 BTC (${one.y.length})`, line: { color: BTC, width: 3, shape: 'hv' }, hovertemplate: '1 BTC posts: %{y}<extra></extra>' },
           { ...b, type: 'scatter', mode: 'lines', name: `0.1 BTC (${tenth.y.length})`, line: { color: TEXT, width: 3, shape: 'hv', dash: 'dash' }, hovertemplate: '0.1 BTC posts: %{y}<extra></extra>' },
         ], layout({ hovermode: 'x unified', yaxis: axis({ title: { text: 'Posts to date' }, rangemode: 'tozero' }) }));
+      },
+    },
+
+    dip: {
+      title: 'The Dip Effect',
+      desc: 'Milestone posts per month (bars) against how far BTC traded below its all-time high that month (line — higher means a deeper dip). If dips send people buying, the two should rise together. 2023 sat deep below the 2021 high while this archive was just getting started, and collecting picked up over time — so treat this as a pattern, not proof.',
+      caption: 'Posts per month · average % below the running all-time high',
+      render(el, posts, prices) {
+        if (!prices || !prices.dates.length) return empty(el, 'BTC price history unavailable.');
+        if (posts.length < 5) return empty(el);
+        // Average daily distance below the running all-time high, per month.
+        const dd = new Map();
+        let ath = 0;
+        prices.dates.forEach((d, i) => {
+          ath = Math.max(ath, prices.values[i]);
+          const m = d.slice(0, 7), e = dd.get(m) || dd.set(m, { sum: 0, n: 0 }).get(m);
+          e.sum += 1 - prices.values[i] / ath; e.n++;
+        });
+        const first = posts[0].date.slice(0, 7), last = posts[posts.length - 1].date.slice(0, 7);
+        const months = [...dd.keys()].filter(m => m >= first && m <= last);
+        const counts = new Map(months.map(m => [m, 0]));
+        posts.forEach(p => { const m = p.date.slice(0, 7); if (counts.has(m)) counts.set(m, counts.get(m) + 1); });
+        const below = months.map(m => 100 * dd.get(m).sum / dd.get(m).n);
+        const x = months.map(m => m + '-15');
+        const deep = months.filter((m, i) => below[i] >= 20), rest = months.filter((m, i) => below[i] < 20);
+        const avg = ms => ms.length ? (ms.reduce((a, m) => a + counts.get(m), 0) / ms.length).toFixed(1) : '—';
+        // 2023 was one long post-2021 drawdown while collecting was just starting,
+        // so also show the comparison from 2024 on.
+        const since = '2024-01', deep24 = deep.filter(m => m >= since), rest24 = rest.filter(m => m >= since);
+        return draw(el, [
+          {
+            x, y: months.map(m => counts.get(m)), type: 'bar', name: 'Posts / month',
+            marker: { color: 'rgba(247,147,26,0.55)' }, hovertemplate: '%{x|%b %Y}: %{y} posts<extra></extra>',
+          },
+          {
+            x, y: below, yaxis: 'y2', type: 'scatter', mode: 'lines', name: '% below all-time high',
+            line: { color: TEXT, width: 2.5, shape: 'spline', smoothing: 0.5 },
+            hovertemplate: '%{x|%b %Y}: %{y:.0f}% below ATH<extra></extra>',
+          },
+        ], layout({
+          margin: { l: 56, r: 56, t: 12, b: 48 },
+          yaxis: axis({ title: { text: 'Posts / month' }, rangemode: 'tozero' }),
+          yaxis2: axis({ overlaying: 'y', side: 'right', showgrid: false, rangemode: 'tozero', ticksuffix: '%', title: { text: '' } }),
+          bargap: 0.2,
+        })).then(() => setNote(el,
+          `Posts per month when BTC was 20%+ below its all-time high, vs. other months — ` +
+          `all months: <b>${avg(deep)}</b> vs <b>${avg(rest)}</b> (${deep.length} / ${rest.length} months)` +
+          (deep24.length && rest24.length && first < since
+            ? ` · since 2024: <b>${avg(deep24)}</b> vs <b>${avg(rest24)}</b> (${deep24.length} / ${rest24.length} months)` : '')));
       },
     },
 

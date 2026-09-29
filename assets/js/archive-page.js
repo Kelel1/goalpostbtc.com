@@ -9,6 +9,25 @@
   const box = $('lightbox'), boxImg = box.querySelector('img'), boxCap = box.querySelector('figcaption');
   let visible = [], current = -1;
 
+  // archive.html?btc=1 (from a Milestone Clustering bar) shows only that exact amount.
+  let exact = parseFloat(new URLSearchParams(location.search).get('btc'));
+  if (!Number.isNaN(exact)) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'btn';
+    chip.textContent = `Only ${GP.fmtBTC(exact)} BTC ✕`;
+    chip.setAttribute('aria-label', `Remove filter: only ${GP.fmtBTC(exact)} BTC`);
+    chip.addEventListener('click', () => {
+      exact = NaN;
+      chip.remove();
+      amount.disabled = false;
+      history.replaceState(null, '', location.pathname + location.hash);
+      render();
+    });
+    $('a-count').before(chip);
+    amount.disabled = true;
+  }
+
   const inBucket = {
     '': () => true,
     'lt0.01': b => b < 0.01,
@@ -30,7 +49,8 @@
   function render() {
     const q = search.value.trim().toLowerCase();
     visible = posts
-      .filter(p => (!q || p.username.toLowerCase().includes(q)) && inBucket[amount.value](p.btc))
+      .filter(p => (!q || p.username.toLowerCase().includes(q)) &&
+        (Number.isNaN(exact) ? inBucket[amount.value](p.btc) : Math.abs(p.btc - exact) < 1e-9))
       .sort(order[sort.value]);
     const ids = new Set();  // one screenshot can hold two milestones (a post and a comment)
     gallery.innerHTML = visible.map((p, i) => `

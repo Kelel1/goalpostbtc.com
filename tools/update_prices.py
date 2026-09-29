@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Refresh data/btc-daily.json with daily BTC/USD closes from Coinbase.
 
-Covers the first milestone date through yesterday (UTC). The site uses this
+Covers 2021 (for the all-time-high baseline) through yesterday (UTC). The site uses this
 file for the price overlay and for each post's BTC price on its date; any
 days newer than the file are topped up live from Kraken in the browser.
 
@@ -19,6 +19,7 @@ MILESTONES = ROOT / "data" / "milestones.csv"
 OUT = ROOT / "data" / "btc-daily.json"
 URL = "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start={}&end={}"
 CHUNK = 290  # Coinbase returns at most 300 candles per request
+HISTORY_START = date(2021, 1, 1)
 
 
 def first_milestone_date():
@@ -34,7 +35,9 @@ def fetch(start, end):
 
 
 def main():
-    start = first_milestone_date() - timedelta(days=7)
+    # Start at 2021 so the Nov 2021 all-time high is in the file (the Dip Effect
+    # chart measures each month's distance below the running all-time high).
+    start = min(first_milestone_date() - timedelta(days=7), HISTORY_START)
     end = datetime.now(timezone.utc).date() - timedelta(days=1)
     closes = {}
     cursor = start

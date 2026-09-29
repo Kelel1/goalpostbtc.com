@@ -1250,3 +1250,13 @@ article.musing figcaption {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* Live stats line under a chart (e.g. The Dip Effect) */
+p.chart-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+  margin: 0.75rem 0 0;
+}
+p.chart-note b { color: var(--btc); font-weight: 500; }
