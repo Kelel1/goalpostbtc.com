@@ -198,6 +198,29 @@
     els.forEach(el => observer.observe(el));
   }
 
+  // Lightweight screenshot viewer used by the charts (the archive page has its own).
+  function openShot(file, caption) {
+    let box = document.getElementById('shot-viewer');
+    if (!box) {
+      document.body.insertAdjacentHTML('beforeend', `
+        <dialog class="lightbox" id="shot-viewer" aria-label="Screenshot viewer">
+          <div class="lightbox-inner" style="grid-template-columns: 1fr">
+            <figure><img alt=""><figcaption></figcaption></figure>
+          </div>
+          <button type="button" class="close-btn" aria-label="Close">✕</button>
+        </dialog>`);
+      box = document.getElementById('shot-viewer');
+      box.querySelector('.close-btn').addEventListener('click', () => box.close());
+      box.addEventListener('click', e => { if (e.target === box || e.target.classList.contains('lightbox-inner')) box.close(); });
+    }
+    const img = box.querySelector('img');
+    img.src = screenshotURL(file);
+    img.alt = 'Screenshot: ' + caption;
+    box.querySelector('figcaption').innerHTML =
+      `${escapeHTML(caption)} · <a href="${archiveURL(file)}">Open in archive →</a>`;
+    if (!box.open) box.showModal();
+  }
+
   function init() {
     initTicker();
     setInterval(initTicker, 60000);
@@ -210,6 +233,6 @@
   window.GP = {
     loadMilestones, loadMusings, loadPrices,
     fmtBTC, fmtUSD, fmtDate, fmtMonth, median, escapeHTML, displayName,
-    screenshotURL, thumbURL, archiveURL, dayNumber, isoDay, initReveal,
+    screenshotURL, thumbURL, archiveURL, dayNumber, isoDay, initReveal, openShot,
   };
 })();

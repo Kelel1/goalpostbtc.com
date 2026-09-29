@@ -11,6 +11,8 @@
   const GRID = 'rgba(247,147,26,0.08)';
   const PRICE = '#9a9084';
   const WINDOW_DAYS = 90;
+  const SHOT = 3;  // customdata index holding a post's screenshot file
+  const CLICK_HINT = '<br><i>Click to view screenshot</i><extra></extra>';
 
   const config = { displayModeBar: false, responsive: true };
 
@@ -44,9 +46,23 @@
     el.innerHTML = `<div class="chart-empty">${msg || 'Not enough data for this view.'}</div>`;
   }
 
+  // Points whose customdata carries a screenshot open it in the viewer when clicked.
+  const shotOf = pt => pt && Array.isArray(pt.customdata) && pt.customdata[SHOT];
+  function wireClicks(el) {
+    if (el._gpClicks) return;
+    el._gpClicks = true;
+    const drag = () => el.querySelector('.nsewdrag');
+    el.on('plotly_click', e => {
+      const pt = e.points[0], file = shotOf(pt);
+      if (file) GP.openShot(file, `${pt.customdata[0]} · ${pt.customdata[1]} BTC`);
+    });
+    el.on('plotly_hover', e => { const d = drag(); if (d && shotOf(e.points[0])) d.style.cursor = 'pointer'; });
+    el.on('plotly_unhover', () => { const d = drag(); if (d) d.style.cursor = ''; });
+  }
+
   function draw(el, traces, lay) {
     if (el.querySelector('.chart-empty')) el.innerHTML = '';
-    return Plotly.react(el, traces, lay, config);
+    return Plotly.react(el, traces, lay, config).then(() => wireClicks(el));
   }
 
   // Trailing-window statistic evaluated at each post date.
@@ -125,8 +141,8 @@
           {
             x: posts.map(p => p.date), y: posts.map(p => p.btc), type: 'scatter', mode: 'markers', name: 'Milestone post',
             marker: { color: BTC, size: 7, opacity: 0.55, line: { width: 0 } },
-            customdata: posts.map(p => [GP.displayName(p.username), GP.fmtBTC(p.btc), GP.fmtDate(p.date)]),
-            hovertemplate: '<b>%{customdata[0]}</b><br>%{customdata[1]} BTC<br>%{customdata[2]}<extra></extra>',
+            customdata: posts.map(p => [GP.displayName(p.username), GP.fmtBTC(p.btc), GP.fmtDate(p.date), p.screenshot]),
+            hovertemplate: '<b>%{customdata[0]}</b><br>%{customdata[1]} BTC<br>%{customdata[2]}' + CLICK_HINT,
           },
           {
             x: med.x, y: med.y, type: 'scatter', mode: 'lines', name: `${WINDOW_DAYS}-day median`,
@@ -160,8 +176,8 @@
           return {
             x: ys.map(p => p.price), y: ys.map(p => p.btc), type: 'scatter', mode: 'markers', name: y,
             marker: { color: shade(i), size: 7, line: { width: 0 } },
-            customdata: ys.map(p => [GP.displayName(p.username), GP.fmtBTC(p.btc), GP.fmtDate(p.date)]),
-            hovertemplate: '<b>%{customdata[0]}</b><br>%{customdata[1]} BTC<br>%{customdata[2]} · BTC at $%{x:,.0f}<extra></extra>',
+            customdata: ys.map(p => [GP.displayName(p.username), GP.fmtBTC(p.btc), GP.fmtDate(p.date), p.screenshot]),
+            hovertemplate: '<b>%{customdata[0]}</b><br>%{customdata[1]} BTC<br>%{customdata[2]} · BTC at $%{x:,.0f}' + CLICK_HINT,
           };
         });
         const bands = new Map();
@@ -194,8 +210,8 @@
           {
             x: pts.map(p => p.date), y: pts.map(p => p.value), type: 'scatter', mode: 'markers', name: 'Milestone value',
             marker: { color: BTC, size: 7, opacity: 0.55 },
-            customdata: pts.map(p => [GP.displayName(p.username), GP.fmtBTC(p.btc), GP.fmtUSD(p.price)]),
-            hovertemplate: '<b>%{customdata[0]}</b><br>%{customdata[1]} BTC ≈ $%{y:,.0f}<br>BTC at %{customdata[2]}<extra></extra>',
+            customdata: pts.map(p => [GP.displayName(p.username), GP.fmtBTC(p.btc), GP.fmtUSD(p.price), p.screenshot]),
+            hovertemplate: '<b>%{customdata[0]}</b><br>%{customdata[1]} BTC ≈ $%{y:,.0f}<br>BTC at %{customdata[2]}' + CLICK_HINT,
           },
           {
             x: med.x, y: med.y, type: 'scatter', mode: 'lines', name: `${WINDOW_DAYS}-day median`,
